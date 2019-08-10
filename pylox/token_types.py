@@ -47,4 +47,6 @@ class TokenTypes(Enum):
     VAR = 37
     WHILE = 38
 
+    COMMENT = 39
+
     EOF  = 9999

@@ -18,7 +18,7 @@ class Scanner:
         return self.current_idx >= len(self.bytes)
 
     def _scan_next_token(self):
-        first_char = self._next_char();
+        first_char = self._consume_next_char();
 
         if first_char in UNAMBIGUOUS_SINGLE_CHARS:
             return self._create_token(UNAMBIGUOUS_SINGLE_CHARS[first_char])
@@ -42,11 +42,19 @@ class Scanner:
                 return self._create_token(TokenTypes.GREATER_EQUAL)
             else:
                 return self._create_token(TokenTypes.GREATER)
+        elif first_char == '/':
+            if self._advance_if('/'):
+                while self._peek() != '\n' and not self._is_finished():
+                    self._consume_next_char()
+                comment_text = self.bytes[self.start_idx + 2:self.current_idx]
+                return self._create_token(TokenTypes.COMMENT, comment_text)
+            else:
+                return self._create_token(TokenTypes.SLASH)
         else:
             message = 'unexpected character "{}" at line {}'.format(first_char, self.line)
             return ScannerError(self.line, message)
 
-    def _next_char(self):
+    def _consume_next_char(self):
         self.current_idx += 1
         return self.bytes[self.current_idx - 1]
 
@@ -58,6 +66,11 @@ class Scanner:
 
         self.current_idx += 1
         return True
+
+    def _peek(self):
+        if self._is_finished():
+            return '\0'
+        return self.bytes[self.current_idx]
 
     def _create_token(self, type, literal=None):
         text = str(self.bytes[self.start_idx:self.current_idx])
@@ -80,6 +93,5 @@ UNAMBIGUOUS_SINGLE_CHARS = {
     '-': TokenTypes.MINUS,
     '+': TokenTypes.PLUS,
     ';': TokenTypes.SEMICOLON,
-    '/': TokenTypes.SLASH,
     '*': TokenTypes.STAR,
 }
