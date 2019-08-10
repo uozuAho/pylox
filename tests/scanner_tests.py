@@ -57,3 +57,21 @@ class ScannerTest_OperatorTokens(unittest.TestCase):
 
         self.assertEqual(len(tokens), 2)
         self.assertEqual(tokens[0].type, TokenTypes.BANG_EQUAL)
+
+    def test_not_equal_greater(self):
+        scanner = Scanner('!=>')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 3)
+        self.assertEqual(tokens[0].type, TokenTypes.BANG_EQUAL)
+        self.assertEqual(tokens[1].type, TokenTypes.GREATER)
+
+    def test_not_equal_greater_equal(self):
+        scanner = Scanner('!=>=')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 3)
+        self.assertEqual(tokens[0].type, TokenTypes.BANG_EQUAL)
+        self.assertEqual(tokens[1].type, TokenTypes.GREATER_EQUAL)
