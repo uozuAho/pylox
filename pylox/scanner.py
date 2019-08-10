@@ -15,7 +15,7 @@ class Scanner:
         yield Token(TokenTypes.EOF, '', None, self.line)
 
     def _is_finished(self):
-        return self.start >= len(self.bytes)
+        return self.current >= len(self.bytes)
 
     def _scan_next_token(self):
         c = self._advance();
