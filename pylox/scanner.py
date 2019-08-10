@@ -36,13 +36,34 @@ class Scanner:
 
         if c in single_chars:
             return self._create_token(single_chars[c])
-
-        # todo: return scanner error (don't throw)
+        elif c == '!':
+            if self._advance_if('='):
+                return self._create_token(TokenTypes.BANG_EQUAL)
+            else:
+                return self._create_token(TokenTypes.BANG)
+        else:
+            message = 'unexpected character "{}" at line {}'.format(c, self.line)
+            return ScannerError(self.line, message)
 
     def _advance(self):
         self.current += 1
         return self.bytes[self.current - 1]
 
+    def _advance_if(self, char):
+        if self._is_finished():
+            return False
+        if self.bytes[self.current] != char:
+            return False
+
+        self.current += 1
+        return True
+
     def _create_token(self, type, literal=None):
         text = str(self.bytes[self.start:self.current])
         return Token(type, text, literal, self.line)
+
+
+class ScannerError:
+    def __init__(self, line, message):
+        self.line = line
+        self.message = message
