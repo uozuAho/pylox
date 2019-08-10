@@ -22,7 +22,14 @@ class Scanner:
 
         if first_char in UNAMBIGUOUS_SINGLE_CHARS:
             return self._create_token(UNAMBIGUOUS_SINGLE_CHARS[first_char])
-        elif first_char == '!':
+        elif first_char in REMAINING_OPERATORS:
+            return self._scan_next_remaining_operators_token(first_char)
+        else:
+            message = 'unexpected character "{}" at line {}'.format(first_char, self.line)
+            return ScannerError(self.line, message)
+
+    def _scan_next_remaining_operators_token(self, first_char):
+        if first_char == '!':
             if self._advance_if('='):
                 return self._create_token(TokenTypes.BANG_EQUAL)
             else:
@@ -50,9 +57,8 @@ class Scanner:
                 return self._create_token(TokenTypes.COMMENT, comment_text)
             else:
                 return self._create_token(TokenTypes.SLASH)
-        else:
-            message = 'unexpected character "{}" at line {}'.format(first_char, self.line)
-            return ScannerError(self.line, message)
+
+        raise Exception("Shouldn't get here")
 
     def _consume_next_char(self):
         self.current_idx += 1
@@ -82,7 +88,6 @@ class ScannerError:
         self.line = line
         self.message = message
 
-
 UNAMBIGUOUS_SINGLE_CHARS = {
     '(': TokenTypes.LEFT_PAREN,
     ')': TokenTypes.RIGHT_PAREN,
@@ -95,3 +100,5 @@ UNAMBIGUOUS_SINGLE_CHARS = {
     ';': TokenTypes.SEMICOLON,
     '*': TokenTypes.STAR,
 }
+
+REMAINING_OPERATORS = '!=<>/'
