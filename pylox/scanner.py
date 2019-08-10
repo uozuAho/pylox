@@ -6,13 +6,13 @@ class Scanner:
         self.bytes = bytes
         self.start_idx = 0
         self.current_idx  = 0
-        self.line = 1
+        self.line_num = 1
 
     def scan_tokens(self):
         while not self._is_finished():
             self.start_idx = self.current_idx;
             yield self._scan_next_token();
-        yield Token(TokenTypes.EOF, '', None, self.line)
+        yield Token(TokenTypes.EOF, '', None, self.line_num)
 
     def _is_finished(self):
         return self.current_idx >= len(self.bytes)
@@ -24,9 +24,15 @@ class Scanner:
             return self._create_token(UNAMBIGUOUS_SINGLE_CHARS[first_char])
         elif first_char in REMAINING_OPERATORS:
             return self._scan_next_remaining_operators_token(first_char)
+        elif first_char in WHITESPACE:
+            return self._scan_next_whitespace_token(first_char)
+        elif first_char == NEWLINE:
+            token = self._create_token(TokenTypes.NEWLINE)
+            self.line_num += 1
+            return token
         else:
-            message = 'unexpected character "{}" at line {}'.format(first_char, self.line)
-            return ScannerError(self.line, message)
+            message = 'unexpected character "{}" at line {}'.format(first_char, self.line_num)
+            return ScannerError(self.line_num, message)
 
     def _scan_next_remaining_operators_token(self, first_char):
         if first_char == '!':
@@ -60,6 +66,12 @@ class Scanner:
 
         raise Exception("Shouldn't get here")
 
+    def _scan_next_whitespace_token(self, first_char):
+        while self._peek() in WHITESPACE and not self._is_finished():
+            self._consume_next_char()
+        whitespace_text = self.bytes[self.start_idx:self.current_idx]
+        return self._create_token(TokenTypes.WHITESPACE, whitespace_text)
+
     def _consume_next_char(self):
         self.current_idx += 1
         return self.bytes[self.current_idx - 1]
@@ -80,13 +92,14 @@ class Scanner:
 
     def _create_token(self, type, literal=None):
         text = str(self.bytes[self.start_idx:self.current_idx])
-        return Token(type, text, literal, self.line)
+        return Token(type, text, literal, self.line_num)
 
 
 class ScannerError:
     def __init__(self, line, message):
         self.line = line
         self.message = message
+
 
 UNAMBIGUOUS_SINGLE_CHARS = {
     '(': TokenTypes.LEFT_PAREN,
@@ -102,3 +115,7 @@ UNAMBIGUOUS_SINGLE_CHARS = {
 }
 
 REMAINING_OPERATORS = '!=<>/'
+
+WHITESPACE = ' \r\t'
+
+NEWLINE = '\n'

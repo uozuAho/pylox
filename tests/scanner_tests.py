@@ -110,3 +110,75 @@ class ScannerTest_Comments(unittest.TestCase):
         self.assertEqual(tokens[0].literal, ' a comment')
         self.assertEqual(tokens[0].line, 1)
         self.assertEqual(tokens[1].type, TokenTypes.EOF)
+
+class ScannerTest_Whitespace(unittest.TestCase):
+
+    def test_single_space(self):
+        scanner = Scanner(' ')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.WHITESPACE)
+        self.assertEqual(tokens[0].lexeme, ' ')
+        self.assertEqual(tokens[0].literal, ' ')
+        self.assertEqual(tokens[0].line, 1)
+        self.assertEqual(tokens[1].type, TokenTypes.EOF)
+
+    def test_multiple_whitespace(self):
+        whitespace_text = '    \r\t\t\t'
+        scanner = Scanner(whitespace_text)
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.WHITESPACE)
+        self.assertEqual(tokens[0].lexeme, whitespace_text)
+        self.assertEqual(tokens[0].literal, whitespace_text)
+        self.assertEqual(tokens[0].line, 1)
+        self.assertEqual(tokens[1].type, TokenTypes.EOF)
+
+class ScannerTest_Newlines(unittest.TestCase):
+
+    def test_single_newline(self):
+        scanner = Scanner('\n')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.NEWLINE)
+        self.assertEqual(tokens[0].lexeme, '\n')
+        self.assertEqual(tokens[0].literal, None)
+        self.assertEqual(tokens[0].line, 1)
+        self.assertEqual(tokens[1].type, TokenTypes.EOF)
+
+    def test_two_newlines(self):
+        scanner = Scanner('\n\n')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 3)
+        self.assertEqual(tokens[0].type, TokenTypes.NEWLINE)
+        self.assertEqual(tokens[0].line, 1)
+        self.assertEqual(tokens[1].type, TokenTypes.NEWLINE)
+        self.assertEqual(tokens[1].line, 2)
+
+    def test_operators_and_newlines(self):
+        scanner = Scanner('.\n.\n\n.')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 7)
+        self.assertEqual(tokens[0].type, TokenTypes.DOT)
+        self.assertEqual(tokens[0].line, 1)
+        self.assertEqual(tokens[1].type, TokenTypes.NEWLINE)
+        self.assertEqual(tokens[1].line, 1)
+        self.assertEqual(tokens[2].type, TokenTypes.DOT)
+        self.assertEqual(tokens[2].line, 2)
+        self.assertEqual(tokens[3].type, TokenTypes.NEWLINE)
+        self.assertEqual(tokens[3].line, 2)
+        self.assertEqual(tokens[4].type, TokenTypes.NEWLINE)
+        self.assertEqual(tokens[4].line, 3)
+        self.assertEqual(tokens[5].type, TokenTypes.DOT)
+        self.assertEqual(tokens[5].line, 4)
+        self.assertEqual(tokens[6].type, TokenTypes.EOF)

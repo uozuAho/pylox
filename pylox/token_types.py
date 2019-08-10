@@ -48,5 +48,7 @@ class TokenTypes(Enum):
     WHILE = 38
 
     COMMENT = 39
+    WHITESPACE = 40
+    NEWLINE = 41
 
     EOF  = 9999
