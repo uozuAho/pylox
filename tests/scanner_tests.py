@@ -182,3 +182,50 @@ class ScannerTest_Newlines(unittest.TestCase):
         self.assertEqual(tokens[5].type, TokenTypes.DOT)
         self.assertEqual(tokens[5].line, 4)
         self.assertEqual(tokens[6].type, TokenTypes.EOF)
+
+class ScannerTest_Strings(unittest.TestCase):
+
+    def test_single_empty_string(self):
+        scanner = Scanner('""')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.STRING)
+        self.assertEqual(tokens[0].lexeme, '""')
+        self.assertEqual(tokens[0].literal, '')
+        self.assertEqual(tokens[0].line, 1)
+        self.assertEqual(tokens[1].type, TokenTypes.EOF)
+
+    def test_single_nonempty_string(self):
+        scanner = Scanner('"asdf"')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.STRING)
+        self.assertEqual(tokens[0].lexeme, '"asdf"')
+        self.assertEqual(tokens[0].literal, 'asdf')
+        self.assertEqual(tokens[0].line, 1)
+        self.assertEqual(tokens[1].type, TokenTypes.EOF)
+
+    def test_unterminated_string(self):
+        scanner = Scanner('"this string is missing a trailing quote')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertIsInstance(tokens[0], ScannerError)
+        self.assertEqual(tokens[1].type, TokenTypes.EOF)
+
+    def test_string_with_newlines(self):
+        scanner = Scanner('"this string is \nover two lines"')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.STRING)
+        self.assertEqual(tokens[0].lexeme, '"this string is \nover two lines"')
+        self.assertEqual(tokens[0].literal, 'this string is \nover two lines')
+        self.assertEqual(tokens[0].line, 2)
+        self.assertEqual(tokens[1].type, TokenTypes.EOF)

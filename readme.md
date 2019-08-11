@@ -5,5 +5,4 @@ using python instead of java.
 
 # todo
 
-- get ! and != working
-- refactor scanner
+- rename 'scan next..' to consume token

@@ -30,6 +30,8 @@ class Scanner:
             token = self._create_token(TokenTypes.NEWLINE)
             self.line_num += 1
             return token
+        elif first_char == '"':
+            return self._scan_string_token(first_char)
         else:
             message = 'unexpected character "{}" at line {}'.format(first_char, self.line_num)
             return ScannerError(self.line_num, message)
@@ -71,6 +73,22 @@ class Scanner:
             self._consume_next_char()
         whitespace_text = self.bytes[self.start_idx:self.current_idx]
         return self._create_token(TokenTypes.WHITESPACE, whitespace_text)
+
+    def _scan_string_token(self, first_char):
+        while self._peek() != '"' and not self._is_finished():
+            if self._peek() == '\n':
+                self.line_num += 1
+            self._consume_next_char()
+
+        if self._is_finished():
+            message = 'unterminated string at line {}'.format(self.line_num)
+            return ScannerError(self.line_num, message)
+
+        # consume the closing "
+        self._consume_next_char()
+
+        string_value = self.bytes[self.start_idx + 1 : self.current_idx - 1]
+        return self._create_token(TokenTypes.STRING, string_value)
 
     def _consume_next_char(self):
         self.current_idx += 1
