@@ -1,7 +1,7 @@
 # pylox interpreter
 
-First implementation of lox from https://craftinginterpreters.com,
-using python instead of java.
+My first implementation of lox from https://craftinginterpreters.com,
+using python.
 
 # todo
 
