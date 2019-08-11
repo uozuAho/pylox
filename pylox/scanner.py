@@ -65,8 +65,8 @@ class Scanner:
             if self._advance_if('/'):
                 while self._peek() != '\n' and not self._is_finished():
                     self._consume_next_char()
-                comment_text = self.bytes[self.start_idx + 2:self.current_idx]
-                return self._create_token(TokenTypes.COMMENT, comment_text)
+                comment_literal = self.bytes[self.start_idx + 2:self.current_idx]
+                return self._create_token(TokenTypes.COMMENT, comment_literal)
             else:
                 return self._create_token(TokenTypes.SLASH)
 
@@ -75,8 +75,7 @@ class Scanner:
     def _consume_whitespace_token(self):
         while self._peek() in WHITESPACE and not self._is_finished():
             self._consume_next_char()
-        whitespace_text = self.bytes[self.start_idx:self.current_idx]
-        return self._create_token(TokenTypes.WHITESPACE, whitespace_text)
+        return self._create_token(TokenTypes.WHITESPACE)
 
     def _consume_string_token(self):
         while self._peek() != '"' and not self._is_finished():
@@ -91,8 +90,8 @@ class Scanner:
         # consume the closing "
         self._consume_next_char()
 
-        string_value = self.bytes[self.start_idx + 1 : self.current_idx - 1]
-        return self._create_token(TokenTypes.STRING, string_value)
+        string_literal = self.bytes[self.start_idx + 1 : self.current_idx - 1]
+        return self._create_token(TokenTypes.STRING, string_literal)
 
     def _consume_number_token(self):
         while self._peek().isdigit():
@@ -105,8 +104,9 @@ class Scanner:
             while self._peek().isdigit():
                 self._consume_next_char()
 
-        value = self.bytes[self.start_idx : self.current_idx]
-        return self._create_token(TokenTypes.NUMBER, value)
+        number_text = self._get_current_value()
+
+        return self._create_token(TokenTypes.NUMBER, number_text)
 
     def _consume_identifier_token(self):
         def is_alnum_or_underscore(char):
@@ -115,7 +115,7 @@ class Scanner:
         while is_alnum_or_underscore(self._peek()):
             self._consume_next_char()
 
-        value = self.bytes[self.start_idx : self.current_idx]
+        value = self._get_current_value()
 
         type = TokenTypes.IDENTIFIER
         if value in KEYWORDS:
@@ -141,6 +141,9 @@ class Scanner:
         if idx >= len(self.bytes):
             return '\0'
         return self.bytes[idx]
+
+    def _get_current_value(self):
+        return self.bytes[self.start_idx : self.current_idx]
 
     def _create_token(self, type, literal=None):
         text = str(self.bytes[self.start_idx:self.current_idx])

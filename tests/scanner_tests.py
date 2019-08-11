@@ -121,7 +121,7 @@ class ScannerTest_Whitespace(unittest.TestCase):
         self.assertEqual(len(tokens), 2)
         self.assertEqual(tokens[0].type, TokenTypes.WHITESPACE)
         self.assertEqual(tokens[0].lexeme, ' ')
-        self.assertEqual(tokens[0].literal, ' ')
+        self.assertEqual(tokens[0].literal, None)
         self.assertEqual(tokens[0].line, 1)
         self.assertEqual(tokens[1].type, TokenTypes.EOF)
 
@@ -134,7 +134,7 @@ class ScannerTest_Whitespace(unittest.TestCase):
         self.assertEqual(len(tokens), 2)
         self.assertEqual(tokens[0].type, TokenTypes.WHITESPACE)
         self.assertEqual(tokens[0].lexeme, whitespace_text)
-        self.assertEqual(tokens[0].literal, whitespace_text)
+        self.assertEqual(tokens[0].literal, None)
         self.assertEqual(tokens[0].line, 1)
         self.assertEqual(tokens[1].type, TokenTypes.EOF)
 
