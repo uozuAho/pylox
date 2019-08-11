@@ -263,3 +263,139 @@ class ScannerTest_Numbers(unittest.TestCase):
         self.assertEqual(tokens[0].type, TokenTypes.NUMBER)
         self.assertEqual(tokens[0].lexeme, '100.12')
         self.assertEqual(tokens[0].literal, '100.12')
+
+class ScannerTest_Identifiers(unittest.TestCase):
+
+    def test_single_char(self):
+        scanner = Scanner('a')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.IDENTIFIER)
+        self.assertEqual(tokens[0].lexeme, 'a')
+        self.assertEqual(tokens[0].literal, None)
+        self.assertEqual(tokens[0].line, 1)
+        self.assertEqual(tokens[1].type, TokenTypes.EOF)
+
+    def test_multiple_char(self):
+        scanner = Scanner('ab')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.IDENTIFIER)
+        self.assertEqual(tokens[0].lexeme, 'ab')
+        self.assertEqual(tokens[0].literal, None)
+
+    def test_multiple_chars_with_underscore(self):
+        scanner = Scanner('a_b')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.IDENTIFIER)
+        self.assertEqual(tokens[0].lexeme, 'a_b')
+        self.assertEqual(tokens[0].literal, None)
+
+    def test_identifier_starting_with_keyword(self):
+        scanner = Scanner('orchid')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.IDENTIFIER)
+        self.assertEqual(tokens[0].lexeme, 'orchid')
+        self.assertEqual(tokens[0].literal, None)
+
+    def test_identifier_made_of_two_keywords(self):
+        scanner = Scanner('orclass')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.IDENTIFIER)
+        self.assertEqual(tokens[0].lexeme, 'orclass')
+        self.assertEqual(tokens[0].literal, None)
+
+class ScannerTest_Keywords(unittest.TestCase):
+
+    def test_or_keyword(self):
+        scanner = Scanner('or')
+
+        tokens = list(scanner.scan_tokens())
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0].type, TokenTypes.OR)
+        self.assertEqual(tokens[0].lexeme, 'or')
+        self.assertEqual(tokens[0].literal, None)
+        self.assertEqual(tokens[0].line, 1)
+        self.assertEqual(tokens[1].type, TokenTypes.EOF)
+
+class ScannerTest_Combinations(unittest.TestCase):
+
+    def filter_useless_tokens(self, tokens):
+        useless = set([
+            TokenTypes.WHITESPACE,
+            TokenTypes.NEWLINE,
+        ])
+        return (token for token in tokens if token.type not in useless)
+
+    def scan_useful_tokens(self, string):
+        tokens = Scanner(string).scan_tokens()
+        return list(self.filter_useless_tokens(tokens))
+
+    def test_this_or_that(self):
+        tokens = self.scan_useful_tokens('this or that')
+
+        self.assertEqual(len(tokens), 4)
+        self.assertEqual(tokens[0].type, TokenTypes.THIS)
+        self.assertEqual(tokens[1].type, TokenTypes.OR)
+        self.assertEqual(tokens[2].type, TokenTypes.IDENTIFIER)
+        self.assertEqual(tokens[2].lexeme, 'that')
+        self.assertEqual(tokens[3].type, TokenTypes.EOF)
+
+    def test_assign_var_with_comment(self):
+        tokens = self.scan_useful_tokens('var a = "beef"; // yeah')
+
+        self.assertEqual(len(tokens), 7)
+        self.assertEqual(tokens[0].type, TokenTypes.VAR)
+        self.assertEqual(tokens[1].type, TokenTypes.IDENTIFIER)
+        self.assertEqual(tokens[1].lexeme, 'a')
+        self.assertEqual(tokens[2].type, TokenTypes.EQUAL)
+        self.assertEqual(tokens[3].type, TokenTypes.STRING)
+        self.assertEqual(tokens[3].literal, 'beef')
+        self.assertEqual(tokens[4].type, TokenTypes.SEMICOLON)
+        self.assertEqual(tokens[5].type, TokenTypes.COMMENT)
+        self.assertEqual(tokens[5].literal, ' yeah')
+        self.assertEqual(tokens[5].line, 1)
+        self.assertEqual(tokens[6].type, TokenTypes.EOF)
+
+    def test_class(self):
+        tokens = self.scan_useful_tokens("""
+            class Breakfast {
+                cook() {
+                    print "yo";
+                }
+            }""")
+
+        self.assertEqual(len(tokens), 13)
+        self.assertEqual(tokens[0].type, TokenTypes.CLASS)
+        self.assertEqual(tokens[0].line, 2)
+        self.assertEqual(tokens[1].type, TokenTypes.IDENTIFIER)
+        self.assertEqual(tokens[1].lexeme, 'Breakfast')
+        self.assertEqual(tokens[2].type, TokenTypes.LEFT_BRACE)
+        self.assertEqual(tokens[3].type, TokenTypes.IDENTIFIER)
+        self.assertEqual(tokens[3].lexeme, 'cook')
+        self.assertEqual(tokens[3].line, 3)
+        self.assertEqual(tokens[4].type, TokenTypes.LEFT_PAREN)
+        self.assertEqual(tokens[5].type, TokenTypes.RIGHT_PAREN)
+        self.assertEqual(tokens[6].type, TokenTypes.LEFT_BRACE)
+        self.assertEqual(tokens[7].type, TokenTypes.PRINT)
+        self.assertEqual(tokens[7].line, 4)
+        self.assertEqual(tokens[8].type, TokenTypes.STRING)
+        self.assertEqual(tokens[8].literal, 'yo')
+        self.assertEqual(tokens[9].type, TokenTypes.SEMICOLON)
+        self.assertEqual(tokens[10].type, TokenTypes.RIGHT_BRACE)
+        self.assertEqual(tokens[11].type, TokenTypes.RIGHT_BRACE)
+        self.assertEqual(tokens[12].type, TokenTypes.EOF)

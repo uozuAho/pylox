@@ -34,6 +34,8 @@ class Scanner:
             return self._consume_string_token()
         elif first_char.isdigit():
             return self._consume_number_token()
+        elif first_char.isalpha():
+            return self._consume_identifier_token()
         else:
             message = 'unexpected character "{}" at line {}'.format(first_char, self.line_num)
             return ScannerError(self.line_num, message)
@@ -106,6 +108,21 @@ class Scanner:
         value = self.bytes[self.start_idx : self.current_idx]
         return self._create_token(TokenTypes.NUMBER, value)
 
+    def _consume_identifier_token(self):
+        def is_alnum_or_underscore(char):
+            return char.isalnum() or char == '_'
+
+        while is_alnum_or_underscore(self._peek()):
+            self._consume_next_char()
+
+        value = self.bytes[self.start_idx : self.current_idx]
+
+        type = TokenTypes.IDENTIFIER
+        if value in KEYWORDS:
+            type = KEYWORDS[value]
+
+        return self._create_token(type)
+
     def _consume_next_char(self):
         self.current_idx += 1
         return self.bytes[self.current_idx - 1]
@@ -154,3 +171,22 @@ REMAINING_OPERATORS = '!=<>/'
 WHITESPACE = ' \r\t'
 
 NEWLINE = '\n'
+
+KEYWORDS = {
+    'and':    TokenTypes.AND,
+    'class':  TokenTypes.CLASS,
+    'else':   TokenTypes.ELSE,
+    'false':  TokenTypes.FALSE,
+    'for':    TokenTypes.FOR,
+    'fun':    TokenTypes.FUN,
+    'if':     TokenTypes.IF,
+    'nil':    TokenTypes.NIL,
+    'or':     TokenTypes.OR,
+    'print':  TokenTypes.PRINT,
+    'return': TokenTypes.RETURN,
+    'super':  TokenTypes.SUPER,
+    'this':   TokenTypes.THIS,
+    'true':   TokenTypes.TRUE,
+    'var':    TokenTypes.VAR,
+    'while':  TokenTypes.WHILE,
+}
