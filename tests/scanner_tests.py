@@ -240,7 +240,7 @@ class ScannerTest_Numbers(unittest.TestCase):
         self.assertEqual(len(tokens), 2)
         self.assertEqual(tokens[0].type, TokenTypes.NUMBER)
         self.assertEqual(tokens[0].lexeme, '2')
-        self.assertEqual(tokens[0].literal, '2')
+        self.assertEqual(tokens[0].literal, 2)
         self.assertEqual(tokens[0].line, 1)
         self.assertEqual(tokens[1].type, TokenTypes.EOF)
 
@@ -252,7 +252,7 @@ class ScannerTest_Numbers(unittest.TestCase):
         self.assertEqual(len(tokens), 2)
         self.assertEqual(tokens[0].type, TokenTypes.NUMBER)
         self.assertEqual(tokens[0].lexeme, '234')
-        self.assertEqual(tokens[0].literal, '234')
+        self.assertEqual(tokens[0].literal, 234)
 
     def test_fractional_number(self):
         scanner = Scanner('100.12')
@@ -262,7 +262,7 @@ class ScannerTest_Numbers(unittest.TestCase):
         self.assertEqual(len(tokens), 2)
         self.assertEqual(tokens[0].type, TokenTypes.NUMBER)
         self.assertEqual(tokens[0].lexeme, '100.12')
-        self.assertEqual(tokens[0].literal, '100.12')
+        self.assertEqual(tokens[0].literal, 100.12)
 
 class ScannerTest_Identifiers(unittest.TestCase):
 

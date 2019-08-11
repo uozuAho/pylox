@@ -105,8 +105,9 @@ class Scanner:
                 self._consume_next_char()
 
         number_text = self._get_current_value()
+        number_value = float(number_text)
 
-        return self._create_token(TokenTypes.NUMBER, number_text)
+        return self._create_token(TokenTypes.NUMBER, number_value)
 
     def _consume_identifier_token(self):
         def is_alnum_or_underscore(char):
