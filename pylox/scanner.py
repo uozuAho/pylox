@@ -11,32 +11,32 @@ class Scanner:
     def scan_tokens(self):
         while not self._is_finished():
             self.start_idx = self.current_idx;
-            yield self._scan_next_token();
+            yield self._consume_token();
         yield Token(TokenTypes.EOF, '', None, self.line_num)
 
     def _is_finished(self):
         return self.current_idx >= len(self.bytes)
 
-    def _scan_next_token(self):
+    def _consume_token(self):
         first_char = self._consume_next_char();
 
         if first_char in UNAMBIGUOUS_SINGLE_CHARS:
             return self._create_token(UNAMBIGUOUS_SINGLE_CHARS[first_char])
         elif first_char in REMAINING_OPERATORS:
-            return self._scan_next_remaining_operators_token(first_char)
+            return self._consume_remaining_operators_token(first_char)
         elif first_char in WHITESPACE:
-            return self._scan_next_whitespace_token(first_char)
+            return self._consume_whitespace_token(first_char)
         elif first_char == NEWLINE:
             token = self._create_token(TokenTypes.NEWLINE)
             self.line_num += 1
             return token
         elif first_char == '"':
-            return self._scan_string_token(first_char)
+            return self._consume_string_token(first_char)
         else:
             message = 'unexpected character "{}" at line {}'.format(first_char, self.line_num)
             return ScannerError(self.line_num, message)
 
-    def _scan_next_remaining_operators_token(self, first_char):
+    def _consume_remaining_operators_token(self, first_char):
         if first_char == '!':
             if self._advance_if('='):
                 return self._create_token(TokenTypes.BANG_EQUAL)
@@ -68,13 +68,13 @@ class Scanner:
 
         raise Exception("Shouldn't get here")
 
-    def _scan_next_whitespace_token(self, first_char):
+    def _consume_whitespace_token(self, first_char):
         while self._peek() in WHITESPACE and not self._is_finished():
             self._consume_next_char()
         whitespace_text = self.bytes[self.start_idx:self.current_idx]
         return self._create_token(TokenTypes.WHITESPACE, whitespace_text)
 
-    def _scan_string_token(self, first_char):
+    def _consume_string_token(self, first_char):
         while self._peek() != '"' and not self._is_finished():
             if self._peek() == '\n':
                 self.line_num += 1
