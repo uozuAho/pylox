@@ -32,6 +32,8 @@ class Scanner:
             return token
         elif first_char == '"':
             return self._consume_string_token(first_char)
+        elif first_char.isdigit():
+            return self._consume_number_token(first_char)
         else:
             message = 'unexpected character "{}" at line {}'.format(first_char, self.line_num)
             return ScannerError(self.line_num, message)
@@ -90,6 +92,20 @@ class Scanner:
         string_value = self.bytes[self.start_idx + 1 : self.current_idx - 1]
         return self._create_token(TokenTypes.STRING, string_value)
 
+    def _consume_number_token(self, first_char):
+        while self._peek().isdigit():
+            self._consume_next_char()
+
+        if self._peek() == '.' and self._peek(1).isdigit():
+            # consume decimal point
+            self._consume_next_char()
+            # continue consuming numbers
+            while self._peek().isdigit():
+                self._consume_next_char()
+
+        value = self.bytes[self.start_idx : self.current_idx]
+        return self._create_token(TokenTypes.NUMBER, value)
+
     def _consume_next_char(self):
         self.current_idx += 1
         return self.bytes[self.current_idx - 1]
@@ -103,10 +119,11 @@ class Scanner:
         self.current_idx += 1
         return True
 
-    def _peek(self):
-        if self._is_finished():
+    def _peek(self, offset=0):
+        idx = self.current_idx + offset
+        if idx >= len(self.bytes):
             return '\0'
-        return self.bytes[self.current_idx]
+        return self.bytes[idx]
 
     def _create_token(self, type, literal=None):
         text = str(self.bytes[self.start_idx:self.current_idx])
