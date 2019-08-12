@@ -1,4 +1,6 @@
 from .scanner import Scanner
+from .parser.parser import Parser
+from .parser.ast_printer import AstPrinter
 
 class Lox:
     def run_file(self, file):
@@ -12,8 +14,10 @@ class Lox:
             self._run(line)
 
     def _run(self, bytes):
-        scanner = Scanner(bytes)
-        tokens = scanner.scan_tokens()
+        tokens = Scanner(bytes).scan_tokens()
+        expression = Parser(list(tokens)).parse()
 
-        for token in tokens:
-            print(token)
+        # for token in tokens:
+        #     print(token)
+
+        AstPrinter().print(expression)

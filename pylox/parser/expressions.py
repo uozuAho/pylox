@@ -1,6 +1,8 @@
 class Expression:
     """ abstract expression """
+
     def accept(self, visitor):
+        """ Uses visitor pattern to extend expression functionality """
         pass
 
 class Binary(Expression):
