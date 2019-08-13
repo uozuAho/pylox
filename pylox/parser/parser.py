@@ -1,5 +1,6 @@
 from .expressions import Binary, Unary, Literal, Grouping
 from ..token_types import TokenTypes as t
+from ..token import Token
 
 
 class Parser:
@@ -9,11 +10,7 @@ class Parser:
         self.current_idx = 0
 
     def parse(self):
-        try:
-            return self._expression()
-        except ParserException as e:
-            print(e)
-            return None
+        return self._expression()
 
     def _expression(self):
         return self._equality()
@@ -140,6 +137,6 @@ class Parser:
 
 
 class ParserException(Exception):
-    def __init__(self, token, message):
+    def __init__(self, token: Token, message: str):
         self.token = token
         self.message = message
