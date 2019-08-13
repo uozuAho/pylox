@@ -14,8 +14,8 @@ class Lox:
             self._run(line)
 
     def _run(self, bytes):
-        tokens = Scanner(bytes).scan_tokens()
-        expression = Parser(list(tokens)).parse()
+        tokens = list(Scanner(bytes).scan_tokens())
+        expression = Parser(tokens).parse()
 
         for token in tokens:
             print(token)

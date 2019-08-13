@@ -4,7 +4,8 @@ from ..token_types import TokenTypes as t
 
 class Parser:
     def __init__(self, tokens):
-        self.tokens = tokens
+        ignore_tokens = [t.COMMENT, t.WHITESPACE, t.NEWLINE]
+        self.tokens = [tk for tk in tokens if tk.type not in ignore_tokens]
         self.current_idx = 0
 
     def parse(self):
