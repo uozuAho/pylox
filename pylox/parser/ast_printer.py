@@ -1,6 +1,10 @@
 class AstPrinter:
-    def print(self, expression):
+
+    def to_string(self, expression):
         return expression.accept(self)
+
+    def print(self, expression):
+        print(self.to_string(expression))
 
     def visit_binary_expression(self, expr):
         return self._parenthesize(expr.operator.lexeme, expr.left, expr.right)

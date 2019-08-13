@@ -17,7 +17,7 @@ class Lox:
         tokens = Scanner(bytes).scan_tokens()
         expression = Parser(list(tokens)).parse()
 
-        # for token in tokens:
-        #     print(token)
+        for token in tokens:
+            print(token)
 
         AstPrinter().print(expression)

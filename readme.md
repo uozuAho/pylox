@@ -5,5 +5,10 @@ using python.
 
 # todo
 
-- test expression parsing. seems broken.
-  just got to the end of https://craftinginterpreters.com/parsing-expressions.html
+- bug: when running prompt:
+        > "asdf" + 4
+        asdf
+    while
+        > "asdf"+4
+        (+ asdf 4.0)
+- try type hints
