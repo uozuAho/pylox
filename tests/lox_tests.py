@@ -30,3 +30,13 @@ class LoxTests_Expressions(unittest.TestCase):
             with self.subTest():
                 result = self.lox.run_str(expression)
                 self.assertEqual(result, expected)
+
+    def test_bools(self):
+        params = [
+            ('true == 1 < 2', True),
+            ('false != 1 < 2 + 4', True)
+        ]
+        for expression, expected in params:
+            with self.subTest():
+                result = self.lox.run_str(expression)
+                self.assertEqual(result, expected)
