@@ -1,3 +1,5 @@
+from ..token import Token
+
 class Expression:
     """ abstract expression """
 
@@ -6,7 +8,7 @@ class Expression:
         pass
 
 class Binary(Expression):
-    def __init__(self, left, operator, right):
+    def __init__(self, left: Expression, operator: Token, right: Expression):
         self.left = left
         self.operator = operator
         self.right = right
@@ -15,7 +17,7 @@ class Binary(Expression):
         return visitor.visit_binary_expression(self)
 
 class Grouping(Expression):
-    def __init__(self, expression):
+    def __init__(self, expression: Expression):
         self.expression = expression
 
     def accept(self, visitor):
@@ -23,13 +25,16 @@ class Grouping(Expression):
 
 class Literal(Expression):
     def __init__(self, value):
-        self.value = value
+        if type(value) is int:
+            self.value = float(value)
+        else:
+            self.value = value
 
     def accept(self, visitor):
         return visitor.visit_literal_expression(self)
 
 class Unary(Expression):
-    def __init__(self, operator, right):
+    def __init__(self, operator: Token, right: Expression):
         self.operator = operator
         self.right = right
 

@@ -5,4 +5,4 @@ using python.
 
 # todo
 
-- add type hints to everything!
+- e2e tests
