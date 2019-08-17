@@ -1,9 +1,12 @@
 import unittest
 
 from pylox.interpreter import Interpreter
-from pylox.parser.expressions import Grouping, Literal, Unary
+from pylox.parser.expressions import Grouping, Literal, Unary, Binary
 from pylox.token import Token
 from pylox.token_types import TokenTypes as t
+
+def new_token(type):
+    return Token(type, None, None, 1)
 
 class InterpreterTests(unittest.TestCase):
 
@@ -26,15 +29,41 @@ class InterpreterTests(unittest.TestCase):
         self.assertEqual(result, 2)
 
     def test_unary_not(self):
-        unary = Unary(Token(t.BANG, '!', None, 1), Literal(False))
+        unary = Unary(new_token(t.BANG), Literal(False))
 
         result = self.interpreter.visit_unary_expression(unary)
 
         self.assertEqual(result, True)
 
-    def test_unary_minux(self):
-        unary = Unary(Token(t.MINUS, '-', None, 1), Literal(2))
+    def test_unary_minus(self):
+        unary = Unary(new_token(t.MINUS), Literal(2))
 
         result = self.interpreter.visit_unary_expression(unary)
 
         self.assertEqual(result, -2)
+
+    def test_binary_multiply(self):
+        binary = Binary(Literal(2), new_token(t.STAR), Literal(4))
+
+        result = self.interpreter.visit_binary_expression(binary)
+
+        self.assertEqual(result, 8)
+
+    def test_binary_add_numbers(self):
+        binary = Binary(Literal(1), new_token(t.PLUS), Literal(1))
+
+        result = self.interpreter.visit_binary_expression(binary)
+
+        self.assertEqual(result, 2)
+
+    def test_binary_add_strings(self):
+        binary = Binary(Literal("hello "), new_token(t.PLUS), Literal("kitty"))
+
+        result = self.interpreter.visit_binary_expression(binary)
+
+        self.assertEqual(result, "hello kitty")
+
+    # def test_binary_add_number_and_string(self):
+    #     binary = Binary(Literal(1), new_token(t.PLUS), Literal("kitty"))
+
+    #     result = self.interpreter.visit_binary_expression(binary)

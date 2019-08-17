@@ -1,9 +1,25 @@
-from .parser.expressions import Expression, Literal, Grouping, Unary
+from .parser.expressions import Expression, Literal, Grouping, Unary, Binary
 from .token_types import TokenTypes as t
 
 class Interpreter:
-    def visit_binary_expression(self, expr):
-        pass
+    def visit_binary_expression(self, expr: Binary):
+        left = self._evaluate(expr.left)
+        right = self._evaluate(expr.right)
+
+        if expr.operator.type == t.MINUS:
+            return left - right
+        if expr.operator.type == t.SLASH:
+            return left / right
+        if expr.operator.type == t.STAR:
+            return left * right
+        if expr.operator.type == t.PLUS:
+            if isinstance(left, float) and isinstance(right, float):
+                return left + right
+            if isinstance(left, str) and isinstance(right, str):
+                return left + right;
+            # todo: interpreter error, trying to add incompatible types
+
+        raise Exception("shouldn't get here")
 
     def visit_grouping_expression(self, expr: Grouping):
         return self._evaluate(expr.expression)

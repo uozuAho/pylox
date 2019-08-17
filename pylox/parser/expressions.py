@@ -25,7 +25,10 @@ class Grouping(Expression):
 
 class Literal(Expression):
     def __init__(self, value):
-        self.value = value
+        if type(value) is int:
+            self.value = float(value)
+        else:
+            self.value = value
 
     def accept(self, visitor):
         return visitor.visit_literal_expression(self)
