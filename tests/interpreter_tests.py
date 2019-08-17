@@ -1,6 +1,6 @@
 import unittest
 
-from pylox.interpreter import Interpreter
+from pylox.interpreter import Interpreter, InterpreterException
 from pylox.parser.expressions import Grouping, Literal, Unary, Binary
 from pylox.token import Token
 from pylox.token_types import TokenTypes as t
@@ -63,7 +63,10 @@ class InterpreterTests(unittest.TestCase):
 
         self.assertEqual(result, "hello kitty")
 
-    # def test_binary_add_number_and_string(self):
-    #     binary = Binary(Literal(1), new_token(t.PLUS), Literal("kitty"))
+    def test_binary_add_number_and_string(self):
+        binary = Binary(Literal(1), new_token(t.PLUS), Literal("kitty"))
 
-    #     result = self.interpreter.visit_binary_expression(binary)
+        with self.assertRaises(InterpreterException) as context:
+            result = self.interpreter.visit_binary_expression(binary)
+
+            self.assertEqual(context.expression, binary)

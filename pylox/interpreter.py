@@ -17,7 +17,7 @@ class Interpreter:
                 return left + right
             if isinstance(left, str) and isinstance(right, str):
                 return left + right;
-            # todo: interpreter error, trying to add incompatible types
+            raise InterpreterException(expr, "invalid operands for binary expression")
 
         raise Exception("shouldn't get here")
 
@@ -44,3 +44,9 @@ class Interpreter:
         if object is None: return False
         if isinstance(object, bool): return object
         return True
+
+
+class InterpreterException(Exception):
+    def __init__(self, expression: Expression, message: str):
+        self.expression = expression
+        self.message = message
