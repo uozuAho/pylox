@@ -6,6 +6,7 @@ class Interpreter:
         left = self._evaluate(expr.left)
         right = self._evaluate(expr.right)
 
+        # arithmetic
         if expr.operator.type == t.MINUS:
             return left - right
         if expr.operator.type == t.SLASH:
@@ -18,6 +19,20 @@ class Interpreter:
             if isinstance(left, str) and isinstance(right, str):
                 return left + right;
             raise InterpreterException(expr, "invalid operands for binary expression")
+
+        # comparison
+        if expr.operator.type == t.GREATER:
+            return left > right
+        if expr.operator.type == t.GREATER_EQUAL:
+            return left >= right
+        if expr.operator.type == t.LESS:
+            return left < right
+        if expr.operator.type == t.LESS_EQUAL:
+            return left <= right
+        if expr.operator.type == t.BANG_EQUAL:
+            return not self._is_equal(left, right)
+        if expr.operator.type == t.EQUAL_EQUAL:
+            return self._is_equal(left, right)
 
         raise Exception("shouldn't get here")
 
@@ -44,6 +59,13 @@ class Interpreter:
         if object is None: return False
         if isinstance(object, bool): return object
         return True
+
+    def _is_equal(self, left, right):
+        if left is None and right is None:
+            return True
+        if left is None:
+            return False
+        return left == right
 
 
 class InterpreterException(Exception):

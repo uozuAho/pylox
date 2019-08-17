@@ -8,7 +8,7 @@ from pylox.token_types import TokenTypes as t
 def new_token(type):
     return Token(type, None, None, 1)
 
-class InterpreterTests(unittest.TestCase):
+class InterpreterTests_Expressions(unittest.TestCase):
 
     def setUp(self):
         self.interpreter = Interpreter()
@@ -70,3 +70,10 @@ class InterpreterTests(unittest.TestCase):
             result = self.interpreter.visit_binary_expression(binary)
 
             self.assertEqual(context.expression, binary)
+
+    def test_binary_comparison(self):
+        comparison = Binary(Literal(1), new_token(t.LESS), Literal(2))
+
+        result = self.interpreter.visit_binary_expression(comparison)
+
+        self.assertEqual(result, True)
