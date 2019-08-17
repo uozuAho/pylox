@@ -1,10 +1,11 @@
 from .scanner import Scanner
 from .parser.parser import Parser, ParserException
+from .interpreter import Interpreter
 from .parser.ast_printer import AstPrinter
 from .token_types import TokenTypes as t
 
 class Lox:
-    def run_file(self, file):
+    def run_file(self, file: str):
         with open(file, 'rb') as infile:
             bytes = infile.read()
             self._run(bytes)
@@ -13,6 +14,13 @@ class Lox:
         while True:
             line = input('> ')
             self._run(line)
+
+    def run_str(self, string: str):
+        tokens = list(Scanner(string).scan_tokens())
+        expression = Parser(tokens).parse()
+        interpreter = Interpreter()
+        result = expression.accept(interpreter)
+        return result
 
     def _run(self, bytes):
         tokens = list(Scanner(bytes).scan_tokens())

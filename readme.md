@@ -6,3 +6,4 @@ using python.
 # todo
 
 - e2e tests
+- lox: merge run_str and _run
