@@ -18,7 +18,7 @@ class Parser:
     def _equality(self):
         expression = self._comparison()
 
-        while self._consume_if(t.BANG_EQUAL, t.BANG):
+        while self._consume_if(t.BANG_EQUAL, t.EQUAL_EQUAL):
             operator = self._previous_token()
             right = self._comparison()
             expression = Binary(expression, operator, right)

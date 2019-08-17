@@ -2,7 +2,7 @@ from .token import Token
 from .token_types import TokenTypes
 
 class Scanner:
-    def __init__(self, bytes):
+    def __init__(self, bytes: bytes):
         self.bytes = bytes
         self.start_idx = 0
         self.current_idx  = 0
