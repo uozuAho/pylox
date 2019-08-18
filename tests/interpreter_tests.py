@@ -42,28 +42,73 @@ class InterpreterTests_Expressions(unittest.TestCase):
 
         self.assertEqual(result, -2)
 
-    def test_binary_multiply(self):
+
+class InterpreterTests_BinaryEqualityExpressions(unittest.TestCase):
+
+    def setUp(self):
+        self.interpreter = Interpreter()
+
+    def test_equality_numbers(self):
+        binary = Binary(Literal(2), new_token(t.EQUAL_EQUAL), Literal(2))
+
+        result = self.interpreter.visit_binary_expression(binary)
+
+        self.assertEqual(result, True)
+
+    def test_equality_bools(self):
+        binary = Binary(Literal(True), new_token(t.EQUAL_EQUAL), Literal(False))
+
+        result = self.interpreter.visit_binary_expression(binary)
+
+        self.assertEqual(result, False)
+
+    def test_equality_number_and_bool(self):
+        binary = Binary(Literal(1), new_token(t.EQUAL_EQUAL), Literal(True))
+
+        result = self.interpreter.visit_binary_expression(binary)
+
+        self.assertEqual(result, False)
+
+    # def test_double_equality(self):
+    #     # 1 == 1 == 1
+    #     comparison = Binary(
+    #         Binary(Literal(2), new_token(t.EQUAL_EQUAL), Literal(2)),
+    #         new_token(t.EQUAL_EQUAL),
+    #         Literal(2)
+    #     )
+
+    #     result = self.interpreter.visit_binary_expression(comparison)
+
+    #     self.assertEqual(result, True)
+
+
+class InterpreterTests_BinaryExpressions(unittest.TestCase):
+
+    def setUp(self):
+        self.interpreter = Interpreter()
+
+    def test_multiply(self):
         binary = Binary(Literal(2), new_token(t.STAR), Literal(4))
 
         result = self.interpreter.visit_binary_expression(binary)
 
         self.assertEqual(result, 8)
 
-    def test_binary_add_numbers(self):
+    def test_add_numbers(self):
         binary = Binary(Literal(1), new_token(t.PLUS), Literal(1))
 
         result = self.interpreter.visit_binary_expression(binary)
 
         self.assertEqual(result, 2)
 
-    def test_binary_add_strings(self):
+    def test_add_strings(self):
         binary = Binary(Literal("hello "), new_token(t.PLUS), Literal("kitty"))
 
         result = self.interpreter.visit_binary_expression(binary)
 
         self.assertEqual(result, "hello kitty")
 
-    def test_binary_add_number_and_string(self):
+    def test_add_number_and_string(self):
         binary = Binary(Literal(1), new_token(t.PLUS), Literal("kitty"))
 
         with self.assertRaises(InterpreterException) as context:
@@ -71,8 +116,15 @@ class InterpreterTests_Expressions(unittest.TestCase):
 
             self.assertEqual(context.expression, binary)
 
-    def test_binary_comparison(self):
+    def test_comparison(self):
         comparison = Binary(Literal(1), new_token(t.LESS), Literal(2))
+
+        result = self.interpreter.visit_binary_expression(comparison)
+
+        self.assertEqual(result, True)
+
+    def test_equality(self):
+        comparison = Binary(Literal(1), new_token(t.EQUAL_EQUAL), Literal(1))
 
         result = self.interpreter.visit_binary_expression(comparison)
 

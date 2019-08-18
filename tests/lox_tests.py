@@ -15,6 +15,8 @@ class LoxTests_Expressions(unittest.TestCase):
             ('2 * 2', 4),
             ('1 + 4 / 2', 3),
             ('(1 + 4) / 2', 2.5),
+            ("""  ( 1 +  4/2) * 3*2 - 10
+               == ( 1 +  2)   * 6   - 10   """, True),
         ]
         for expression, expected in params:
             with self.subTest():
