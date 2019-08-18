@@ -1,6 +1,6 @@
 import unittest
 
-from pylox.lox import Lox, LoxPrompt
+from pylox.lox import Lox, LoxRepl
 
 
 class LoxTests_RunStr_Expressions(unittest.TestCase):
@@ -44,18 +44,17 @@ class LoxTests_RunStr_Expressions(unittest.TestCase):
                 self.assertEqual(result, expected)
 
 
-class LoxTests_RunPrompt_Expressions(unittest.TestCase):
+class LoxReplTests_Expressions(unittest.TestCase):
 
     def setUp(self):
         self.lox = Lox()
-        self.prompt = LoxPrompt(self.lox)
+        self.prompt = LoxRepl(self.lox)
         super().setUp()
 
-    def test_single_input(self):
-        output = self.prompt.run(['1 + 1'])
+    def test_execute_single(self):
+        output = self.prompt.execute('1 + 1')
 
-        self.assertEqual(len(output), 1)
-        self.assertEqual(output[0], '2.0')
+        self.assertEqual(output, '2.0')
 
     def test_multiple_inputs(self):
         output = self.prompt.run([
