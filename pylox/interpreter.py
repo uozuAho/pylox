@@ -65,6 +65,8 @@ class Interpreter:
             return True
         if left is None:
             return False
+        if type(left) is not type(right):
+            return False
         return left == right
 
 
