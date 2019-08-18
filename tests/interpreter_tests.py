@@ -69,17 +69,18 @@ class InterpreterTests_BinaryEqualityExpressions(unittest.TestCase):
 
         self.assertEqual(result, False)
 
-    # def test_double_equality(self):
-    #     # 1 == 1 == 1
-    #     comparison = Binary(
-    #         Binary(Literal(2), new_token(t.EQUAL_EQUAL), Literal(2)),
-    #         new_token(t.EQUAL_EQUAL),
-    #         Literal(2)
-    #     )
+    @unittest.skip('this is a known issue (see readme). Hopefully gets fixed in blog...')
+    def test_double_equality(self):
+        # 1 == 1 == 1
+        comparison = Binary(
+            Binary(Literal(1), new_token(t.EQUAL_EQUAL), Literal(1)),
+            new_token(t.EQUAL_EQUAL),
+            Literal(1)
+        )
 
-    #     result = self.interpreter.visit_binary_expression(comparison)
+        result = self.interpreter.visit_binary_expression(comparison)
 
-    #     self.assertEqual(result, True)
+        self.assertEqual(result, True)
 
 
 class InterpreterTests_BinaryExpressions(unittest.TestCase):
