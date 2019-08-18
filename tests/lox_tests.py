@@ -3,10 +3,10 @@ import unittest
 from pylox.lox import Lox
 
 
-class LoxTests_Expressions(unittest.TestCase):
+class LoxTests_RunStr_Expressions(unittest.TestCase):
 
     def setUp(self):
-        self.lox = Lox()
+        self.lox = Lox(debug=False)
         super().setUp()
 
     def test_numerical(self):
@@ -42,3 +42,20 @@ class LoxTests_Expressions(unittest.TestCase):
             with self.subTest():
                 result = self.lox.run_str(expression)
                 self.assertEqual(result, expected)
+
+
+class LoxTests_RunPrompt_Expressions(unittest.TestCase):
+
+    def setUp(self):
+        self.lox = Lox(debug=False)
+        super().setUp()
+
+    def test_asdf(self):
+        output = self.lox.run_prompt([
+            '1 + 1'
+        ])
+
+        output = list(output)
+
+        self.assertEqual(len(output), 1)
+        self.assertEqual(output[0], '2')

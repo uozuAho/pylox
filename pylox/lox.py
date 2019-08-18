@@ -4,16 +4,30 @@ from .interpreter import Interpreter
 from .parser.ast_printer import AstPrinter
 from .token_types import TokenTypes as t
 
+
 class Lox:
+
+    def __init__(self, debug: bool=False):
+        print('cork')
+        self.debug = debug
+
     def run_file(self, file: str):
         with open(file, 'rb') as infile:
             bytes = infile.read()
             self._run(bytes)
 
-    def run_prompt(self):
-        while True:
-            line = input('> ')
-            self._run(line)
+    def run_prompt(self, input_lines=None):
+        def get_inputs():
+            if input_lines is None:
+                while True:
+                    yield input('> ')
+            else:
+                for line in input_lines:
+                    yield line
+
+        for line in get_inputs():
+            print(line)
+            yield self._run(line)
 
     def run_str(self, string: str):
         tokens = list(Scanner(string).scan_tokens())
