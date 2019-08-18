@@ -50,12 +50,12 @@ class LoxTests_RunPrompt_Expressions(unittest.TestCase):
         self.lox = Lox(debug=False)
         super().setUp()
 
-    def test_asdf(self):
+    def test_incomplete_expression(self):
         output = self.lox.run_prompt([
-            '1 + 1'
+            '1 +'
         ])
 
         output = list(output)
 
         self.assertEqual(len(output), 1)
-        self.assertEqual(output[0], '2')
+        self.assertTrue('Expected expression' in output[0])

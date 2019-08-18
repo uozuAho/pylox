@@ -8,14 +8,15 @@ from .token_types import TokenTypes as t
 class Lox:
 
     def __init__(self, debug: bool=False):
-        print('cork')
-        self.debug = debug
+        self.print_tokens = debug
+        self.print_ast = debug
 
     def run_file(self, file: str):
         with open(file, 'rb') as infile:
             bytes = infile.read()
             self._run(bytes)
 
+    # todo: extract to prompt runner
     def run_prompt(self, input_lines=None):
         def get_inputs():
             if input_lines is None:
@@ -25,13 +26,32 @@ class Lox:
                 for line in input_lines:
                     yield line
 
+        outputs = []
         for line in get_inputs():
-            print(line)
-            yield self._run(line)
+            try:
+                output = self.run_str(line)
+            except ParserException as p:
+                output = self._parser_exception_to_message(p)
+            # todo: handle interpreter exception
+
+            # todo: abstract stream io
+            if input_lines is None:
+                print(output)
+            else:
+                outputs.append(output)
+
+        return outputs
 
     def run_str(self, string: str):
         tokens = list(Scanner(string).scan_tokens())
+        if self.print_tokens:
+            for token in tokens:
+                print(token)
+
         expression = Parser(tokens).parse()
+        if self.print_ast:
+            AstPrinter().print(expression)
+
         interpreter = Interpreter()
         result = expression.accept(interpreter)
         return result
@@ -49,3 +69,10 @@ class Lox:
             else:
                 position_msg = f'at token "{p.token.lexeme}"'
             print(f'{position_msg}: {p.message}')
+
+    def _parser_exception_to_message(self, exception: ParserException):
+        if exception.token.type == t.EOF:
+            position_msg = 'at end of file'
+        else:
+            position_msg = f'at token "{exception.token.lexeme}"'
+        return f'{position_msg}: {exception.message}'
