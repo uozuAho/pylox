@@ -34,6 +34,8 @@ class Lox:
                 output = self._parser_exception_to_message(p)
             # todo: handle interpreter exception
 
+            output = str(output)
+
             # todo: abstract stream io
             if input_lines is None:
                 print(output)

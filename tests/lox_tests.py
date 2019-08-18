@@ -50,12 +50,26 @@ class LoxTests_RunPrompt_Expressions(unittest.TestCase):
         self.lox = Lox(debug=False)
         super().setUp()
 
+    def test_single_input(self):
+        output = self.lox.run_prompt(['1 + 1'])
+
+        self.assertEqual(len(output), 1)
+        self.assertEqual(output[0], '2.0')
+
+    def test_multiple_inputs(self):
+        output = self.lox.run_prompt([
+            '1 + 1',
+            '2 + 2'
+        ])
+
+        self.assertEqual(len(output), 2)
+        self.assertEqual(output[0], '2.0')
+        self.assertEqual(output[1], '4.0')
+
     def test_incomplete_expression(self):
         output = self.lox.run_prompt([
             '1 +'
         ])
-
-        output = list(output)
 
         self.assertEqual(len(output), 1)
         self.assertTrue('Expected expression' in output[0])

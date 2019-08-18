@@ -6,6 +6,7 @@ using python.
 # todo
 
 - lox: merge run_str and _run
+- lox: refactor, extract prompt runner
 - bug: 1 == 1 == 1 is false due to (I think):
     - (1 == 1) == 1
     - ( True ) == 1
