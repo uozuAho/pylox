@@ -1,12 +1,12 @@
 import unittest
 
-from pylox.lox import Lox
+from pylox.lox import Lox, LoxPrompt
 
 
 class LoxTests_RunStr_Expressions(unittest.TestCase):
 
     def setUp(self):
-        self.lox = Lox(debug=False)
+        self.lox = Lox()
         super().setUp()
 
     def test_numerical(self):
@@ -47,17 +47,18 @@ class LoxTests_RunStr_Expressions(unittest.TestCase):
 class LoxTests_RunPrompt_Expressions(unittest.TestCase):
 
     def setUp(self):
-        self.lox = Lox(debug=False)
+        self.lox = Lox()
+        self.prompt = LoxPrompt(self.lox)
         super().setUp()
 
     def test_single_input(self):
-        output = self.lox.run_prompt(['1 + 1'])
+        output = self.prompt.run(['1 + 1'])
 
         self.assertEqual(len(output), 1)
         self.assertEqual(output[0], '2.0')
 
     def test_multiple_inputs(self):
-        output = self.lox.run_prompt([
+        output = self.prompt.run([
             '1 + 1',
             '2 + 2'
         ])
@@ -67,7 +68,7 @@ class LoxTests_RunPrompt_Expressions(unittest.TestCase):
         self.assertEqual(output[1], '4.0')
 
     def test_incomplete_expression(self):
-        output = self.lox.run_prompt([
+        output = self.prompt.run([
             '1 +'
         ])
 
