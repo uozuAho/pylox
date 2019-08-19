@@ -1,9 +1,9 @@
 import unittest
 
-from pylox.lox import Lox
+from pylox.lox import Lox, LoxRepl
 
 
-class LoxTests_Expressions(unittest.TestCase):
+class LoxTests_RunStr_Expressions(unittest.TestCase):
 
     def setUp(self):
         self.lox = Lox()
@@ -42,3 +42,21 @@ class LoxTests_Expressions(unittest.TestCase):
             with self.subTest():
                 result = self.lox.run_str(expression)
                 self.assertEqual(result, expected)
+
+
+class LoxReplTests_Expressions(unittest.TestCase):
+
+    def setUp(self):
+        self.lox = Lox()
+        self.prompt = LoxRepl(self.lox)
+        super().setUp()
+
+    def test_execute_single(self):
+        output = self.prompt.execute('1 + 1')
+
+        self.assertEqual(output, '2.0')
+
+    def test_execute_incomplete_expression(self):
+        output = self.prompt.execute('1 +')
+
+        self.assertTrue('Expected expression' in output)
