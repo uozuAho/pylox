@@ -56,20 +56,7 @@ class LoxReplTests_Expressions(unittest.TestCase):
 
         self.assertEqual(output, '2.0')
 
-    def test_multiple_inputs(self):
-        output = self.prompt.run([
-            '1 + 1',
-            '2 + 2'
-        ])
+    def test_execute_incomplete_expression(self):
+        output = self.prompt.execute('1 +')
 
-        self.assertEqual(len(output), 2)
-        self.assertEqual(output[0], '2.0')
-        self.assertEqual(output[1], '4.0')
-
-    def test_incomplete_expression(self):
-        output = self.prompt.run([
-            '1 +'
-        ])
-
-        self.assertEqual(len(output), 1)
-        self.assertTrue('Expected expression' in output[0])
+        self.assertTrue('Expected expression' in output)

@@ -5,8 +5,6 @@ using python.
 
 # todo
 
-- lox: merge run_str and _run
-- lox: refactor, extract prompt runner
 - bug: 1 == 1 == 1 is false due to (I think):
     - (1 == 1) == 1
     - ( True ) == 1
@@ -16,6 +14,7 @@ using python.
 
 - python to javascript
     - try first, then look for existing tools
+- python to bash
 - python to webassembly
 - c# to webassembly
     - what does blazor do?
