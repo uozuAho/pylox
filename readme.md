@@ -12,7 +12,9 @@ Run the pylox REPL:
 
 
 # todo
-
+- write good lox test, get passing
+- fix other tests
+- check repl works
 - bug: 1 == 1 == 1 is false due to (I think):
     - (1 == 1) == 1
     - ( True ) == 1

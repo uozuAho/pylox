@@ -1,4 +1,7 @@
+from typing import Iterator
+
 from .expressions import Binary, Unary, Literal, Grouping
+from .statements import Statement, PrintStatement, ExpressionStatement
 from ..token_types import TokenTypes as t
 from ..token import Token
 
@@ -9,8 +12,24 @@ class Parser:
         self.tokens = [tk for tk in tokens if tk.type not in ignore_tokens]
         self.current_idx = 0
 
-    def parse(self):
-        return self._expression()
+    def parse(self) -> Iterator[Statement]:
+        while self._is_finished():
+            yield self._statement()
+
+    def _statement(self):
+        if self._current_token_is(t.PRINT):
+            return self._print_statement()
+        return self._expression_statement()
+
+    def _print_statement(self):
+        expr = self._expression()
+        self._consume(t.SEMICOLON, "expected ';' after expression")
+        return PrintStatement(expr)
+
+    def _expression_statement(self):
+        expr = self._expression()
+        self._consume(t.SEMICOLON, "expected ';' after expression")
+        return ExpressionStatement(expr)
 
     def _expression(self):
         return self._equality()
