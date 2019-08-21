@@ -2,7 +2,7 @@ import sys
 
 from pylox.lox import Lox, LoxRepl
 
-DEBUG = True
+DEBUG = False
 
 if __name__ == "__main__":
     args = sys.argv[1:]  # arg 0 is the name of this script
