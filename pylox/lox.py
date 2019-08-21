@@ -22,7 +22,7 @@ class Lox:
             AstPrinter().print(expression)
 
         interpreter = Interpreter()
-        result = expression.accept(interpreter)
+        result = interpreter.interpret(expression)
         return result
 
 

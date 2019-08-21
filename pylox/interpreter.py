@@ -4,6 +4,9 @@ from .token import Token
 
 
 class Interpreter:
+    def interpret(self, expression: Expression):
+        return expression.accept(self)
+
     def visit_binary_expression(self, expr: Binary):
         left = self._evaluate(expr.left)
         right = self._evaluate(expr.right)
