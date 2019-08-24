@@ -7,3 +7,7 @@ class OutputStream:
 class StdOutputStream(OutputStream):
     def send(self, data):
         print(data)
+
+
+class NullOutputStream(OutputStream):
+    pass

@@ -1,6 +1,7 @@
 import unittest
 
 from pylox.lox import Lox, LoxRepl
+from pylox.io import NullOutputStream
 from utils.test_io import TestOutputStream
 
 
@@ -18,7 +19,7 @@ class LoxTests_Io(unittest.TestCase):
 class LoxTests_RunStr_Expressions(unittest.TestCase):
 
     def setUp(self):
-        self.lox = Lox()
+        self.lox = Lox(output = NullOutputStream())
 
     def test_numerical(self):
         params = [
@@ -58,7 +59,7 @@ class LoxTests_RunStr_Expressions(unittest.TestCase):
 class LoxReplTests_Expressions(unittest.TestCase):
 
     def setUp(self):
-        self.lox = Lox()
+        self.lox = Lox(output = NullOutputStream())
         self.prompt = LoxRepl(self.lox)
         super().setUp()
 
