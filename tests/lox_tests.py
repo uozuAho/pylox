@@ -1,4 +1,3 @@
-import queue
 import unittest
 
 from pylox.lox import Lox, LoxRepl
@@ -6,26 +5,21 @@ from pylox.lox import Lox, LoxRepl
 
 class TestOutputStream:
     def __init__(self):
-        self.send_queue = queue.Queue()
+        self.last_sent = None
 
     def send(self, data):
-        self.send_queue.put(data)
-
-    def get_next_sent(self):
-        return self.send_queue.get_nowait()
+        self.last_sent = data
 
 
 class LoxTests_Io(unittest.TestCase):
 
     def setUp(self):
-        self.io = TestOutputStream()
-        self.lox = Lox(self.io)
+        self.output = TestOutputStream()
+        self.lox = Lox(self.output)
 
     def test_run_str_simple_output(self):
         self.lox.run_str('1 + 1')
-
-        output = self.io.get_next_sent()
-        self.assertEqual(output, 2)
+        self.assertEqual(self.output.last_sent, 2)
 
 
 class LoxTests_RunStr_Expressions(unittest.TestCase):
