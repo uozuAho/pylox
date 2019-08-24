@@ -1,14 +1,7 @@
 import unittest
 
 from pylox.lox import Lox, LoxRepl
-
-
-class TestOutputStream:
-    def __init__(self):
-        self.last_sent = None
-
-    def send(self, data):
-        self.last_sent = data
+from utils.test_io import TestOutputStream
 
 
 class LoxTests_Io(unittest.TestCase):
