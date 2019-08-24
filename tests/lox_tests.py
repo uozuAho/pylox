@@ -2,18 +2,6 @@ import unittest
 
 from pylox.lox import Lox, LoxRepl
 from pylox.io import NullOutputStream
-from utils.test_io import TestOutputStream
-
-
-class LoxTests_Io(unittest.TestCase):
-
-    def setUp(self):
-        self.output = TestOutputStream()
-        self.lox = Lox(self.output)
-
-    def test_run_str_simple_output(self):
-        self.lox.run_str('1 + 1')
-        self.assertEqual(self.output.last_sent, 2)
 
 
 class LoxTests_RunStr_Expressions(unittest.TestCase):
