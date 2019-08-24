@@ -3,13 +3,13 @@ from .parser.parser import Parser, ParserException
 from .interpreter import Interpreter, InterpreterException
 from .parser.ast_printer import AstPrinter
 from .token_types import TokenTypes as t
-from .io import Io, StdOutIo
+from .io import OutputStream, StdOutputStream
 
 
 class Lox:
 
-    def __init__(self, io: Io=None, debug: bool=False):
-        self.io = io or StdOutIo()
+    def __init__(self, output: OutputStream=None, debug: bool=False):
+        self.out = output or StdOutputStream()
         self.print_tokens = debug
         self.print_ast = debug
 
@@ -24,12 +24,12 @@ class Lox:
             ast = AstPrinter().to_string(expression)
             self._output(ast)
 
-        interpreter = Interpreter(self.io)
+        interpreter = Interpreter(self.out)
         result = interpreter.interpret(expression)
         return result
 
     def _output(self, data):
-        self.io.send(data)
+        self.out.send(data)
 
 
 class LoxRepl:

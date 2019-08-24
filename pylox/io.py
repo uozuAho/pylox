@@ -1,9 +1,9 @@
-class Io:
+class OutputStream:
     """ abstract io 'interface' """
     def send(self, data):
         pass
 
 
-class StdOutIo(Io):
+class StdOutputStream(OutputStream):
     def send(self, data):
         print(data)

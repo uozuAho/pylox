@@ -1,16 +1,16 @@
 from .parser.expressions import Expression, Literal, Grouping, Unary, Binary
 from .token_types import TokenTypes as t
 from .token import Token
-from .io import Io, StdOutIo
+from .io import OutputStream, StdOutputStream
 
 
 class Interpreter:
-    def __init__(self, io: Io=None):
-        self.io = io or StdOutIo()
+    def __init__(self, output: OutputStream=None):
+        self.out = output or StdOutputStream()
 
     def interpret(self, expression: Expression):
         result = expression.accept(self)
-        self.io.send(result)
+        self.out.send(result)
         return result
 
     def visit_binary_expression(self, expr: Binary):

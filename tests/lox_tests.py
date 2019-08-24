@@ -4,7 +4,7 @@ import unittest
 from pylox.lox import Lox, LoxRepl
 
 
-class TestIo:
+class TestOutputStream:
     def __init__(self):
         self.send_queue = queue.Queue()
 
@@ -18,7 +18,7 @@ class TestIo:
 class LoxTests_Io(unittest.TestCase):
 
     def setUp(self):
-        self.io = TestIo()
+        self.io = TestOutputStream()
         self.lox = Lox(self.io)
 
     def test_run_str_simple_output(self):
