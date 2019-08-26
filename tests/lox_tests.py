@@ -3,7 +3,7 @@ import unittest
 from pylox.lox import Lox
 from pylox.io import NullOutputStream
 
-from utils.test_io import TestOutputStream
+from test_utils.test_io import TestOutputStream
 
 
 class LoxTests_Execute_Expressions(unittest.TestCase):

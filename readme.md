@@ -5,8 +5,6 @@ using python.
 
 # todo
 
-- move test utils to new module to avoid python shittyness
-- bug: double output in repl
 - bug: 1 == 1 == 1 is false due to (I think):
     - (1 == 1) == 1
     - ( True ) == 1
