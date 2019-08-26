@@ -13,11 +13,11 @@ class Lox:
         self.print_tokens = debug
         self.print_ast = debug
 
-    def execute(self, input):
+    def execute(self, input: str):
         error_message = None
 
         try:
-            self.run_str(input)
+            self._execute(input)
         except ParserException as p:
             error_message = self._parser_exception_to_message(p)
         except InterpreterException as i:
@@ -26,8 +26,8 @@ class Lox:
         if error_message:
             self.out.send(error_message)
 
-    def run_str(self, string: str):
-        tokens = list(Scanner(string).scan_tokens())
+    def _execute(self, input: str):
+        tokens = list(Scanner(input).scan_tokens())
         if self.print_tokens:
             for token in tokens:
                 self._output(token)
@@ -38,8 +38,7 @@ class Lox:
             self._output(ast)
 
         interpreter = Interpreter(self.out)
-        result = interpreter.interpret(expression)
-        return result
+        interpreter.interpret(expression)
 
     def _output(self, data):
         self.out.send(data)
