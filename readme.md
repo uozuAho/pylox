@@ -5,7 +5,8 @@ using python.
 
 # todo
 
-- lox repl to use output stream
+- get rid of run_str
+- move test utils to new module to avoid python shittyness
 - bug: double output in repl
 - bug: 1 == 1 == 1 is false due to (I think):
     - (1 == 1) == 1

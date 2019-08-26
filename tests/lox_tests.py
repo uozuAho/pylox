@@ -1,13 +1,16 @@
 import unittest
 
-from pylox.lox import Lox, LoxRepl
+from pylox.lox import Lox
 from pylox.io import NullOutputStream
 
+from utils.test_io import TestOutputStream
 
-class LoxTests_RunStr_Expressions(unittest.TestCase):
+
+class LoxTests_Execute_Expressions(unittest.TestCase):
 
     def setUp(self):
-        self.lox = Lox(output = NullOutputStream())
+        self.output = TestOutputStream()
+        self.lox = Lox(output = self.output)
 
     def test_numerical(self):
         params = [
@@ -20,8 +23,8 @@ class LoxTests_RunStr_Expressions(unittest.TestCase):
         ]
         for expression, expected in params:
             with self.subTest():
-                result = self.lox.run_str(expression)
-                self.assertEqual(result, expected)
+                self.lox.execute(expression)
+                self.assertEqual(self.output.last_sent, expected)
 
     def test_strings(self):
         params = [
@@ -30,8 +33,8 @@ class LoxTests_RunStr_Expressions(unittest.TestCase):
         ]
         for expression, expected in params:
             with self.subTest():
-                result = self.lox.run_str(expression)
-                self.assertEqual(result, expected)
+                self.lox.execute(expression)
+                self.assertEqual(self.output.last_sent, expected)
 
     def test_bools(self):
         params = [
@@ -40,23 +43,9 @@ class LoxTests_RunStr_Expressions(unittest.TestCase):
         ]
         for expression, expected in params:
             with self.subTest():
-                result = self.lox.run_str(expression)
-                self.assertEqual(result, expected)
+                self.lox.execute(expression)
+                self.assertEqual(self.output.last_sent, expected)
 
-
-class LoxReplTests_Expressions(unittest.TestCase):
-
-    def setUp(self):
-        self.lox = Lox(output = NullOutputStream())
-        self.prompt = LoxRepl(self.lox)
-        super().setUp()
-
-    def test_execute_single(self):
-        output = self.prompt.execute('1 + 1')
-
-        self.assertEqual(output, '2.0')
-
-    def test_execute_incomplete_expression(self):
-        output = self.prompt.execute('1 +')
-
-        self.assertTrue('Expected expression' in output)
+    def test_incomplete_expression(self):
+        self.lox.execute('1 +')
+        self.assertTrue('Expected expression' in self.output.last_sent)

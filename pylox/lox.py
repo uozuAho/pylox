@@ -13,6 +13,19 @@ class Lox:
         self.print_tokens = debug
         self.print_ast = debug
 
+    def execute(self, input):
+        error_message = None
+
+        try:
+            self.run_str(input)
+        except ParserException as p:
+            error_message = self._parser_exception_to_message(p)
+        except InterpreterException as i:
+            error_message = self._interpreter_exception_to_message(i)
+
+        if error_message:
+            self.out.send(error_message)
+
     def run_str(self, string: str):
         tokens = list(Scanner(string).scan_tokens())
         if self.print_tokens:
@@ -31,28 +44,6 @@ class Lox:
     def _output(self, data):
         self.out.send(data)
 
-
-class LoxRepl:
-
-    def __init__(self, lox: Lox):
-        self.lox = lox
-
-    def run(self):
-        while True:
-            line = input('> ')
-            output = self.execute(line)
-            print(output)
-
-    def execute(self, input) -> str:
-        try:
-            output = self.lox.run_str(input)
-        except ParserException as p:
-            output = self._parser_exception_to_message(p)
-        except InterpreterException as i:
-            output = self._interpreter_exception_to_message(i)
-
-        return str(output)
-
     def _parser_exception_to_message(self, exception: ParserException):
         if exception.token.type == t.EOF:
             position_msg = 'at end of file'
@@ -63,3 +54,14 @@ class LoxRepl:
     def _interpreter_exception_to_message(self, exception: InterpreterException):
         expression_str = AstPrinter().to_string(exception.expression)
         return f'at expression "{expression_str}": {exception.message}'
+
+
+class LoxRepl:
+
+    def __init__(self, lox: Lox):
+        self.lox = lox
+
+    def run(self):
+        while True:
+            line = input('> ')
+            self.lox.execute(line)
