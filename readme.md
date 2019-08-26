@@ -1,7 +1,15 @@
 # pylox interpreter
 
-My first implementation of lox from https://craftinginterpreters.com,
-using python.
+My first implementation of lox from https://craftinginterpreters.com, using python.
+
+Running tests:
+
+    ./run_tests.sh
+
+Run the pylox REPL:
+
+    python pylox.py
+
 
 # todo
 
