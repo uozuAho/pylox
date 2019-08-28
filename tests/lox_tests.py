@@ -23,7 +23,7 @@ class LoxTests_Execute_Expressions(unittest.TestCase):
         ]
         for expression, expected in params:
             with self.subTest():
-                self.lox.execute(expression)
+                self.lox.execute(f'print {expression};')
                 self.assertEqual(self.output.last_sent, expected)
 
     def test_strings(self):
@@ -33,7 +33,7 @@ class LoxTests_Execute_Expressions(unittest.TestCase):
         ]
         for expression, expected in params:
             with self.subTest():
-                self.lox.execute(expression)
+                self.lox.execute(f'print {expression};')
                 self.assertEqual(self.output.last_sent, expected)
 
     def test_bools(self):
@@ -43,7 +43,7 @@ class LoxTests_Execute_Expressions(unittest.TestCase):
         ]
         for expression, expected in params:
             with self.subTest():
-                self.lox.execute(expression)
+                self.lox.execute(f'print {expression};')
                 self.assertEqual(self.output.last_sent, expected)
 
     def test_incomplete_expression(self):
