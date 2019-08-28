@@ -12,7 +12,6 @@ Run the pylox REPL:
 
 
 # todo
-
 - bug: 1 == 1 == 1 is false due to (I think):
     - (1 == 1) == 1
     - ( True ) == 1

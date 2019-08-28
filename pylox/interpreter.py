@@ -1,4 +1,7 @@
+from typing import Iterable
+
 from .parser.expressions import Expression, Literal, Grouping, Unary, Binary
+from .parser.statements import Statement, ExpressionStatement, PrintStatement
 from .token_types import TokenTypes as t
 from .token import Token
 from .io import OutputStream, StdOutputStream
@@ -8,10 +11,16 @@ class Interpreter:
     def __init__(self, output: OutputStream=None):
         self.out = output or StdOutputStream()
 
-    def interpret(self, expression: Expression):
-        result = expression.accept(self)
-        self.out.send(result)
-        return result
+    def interpret(self, statements: Iterable[Statement]):
+        for statement in statements:
+            self._execute(statement)
+
+    def visit_expression_statement(self, stmt: ExpressionStatement):
+        self._evaluate(stmt.expression)
+
+    def visit_print_statement(self, stmt: PrintStatement):
+        value = self._evaluate(stmt.expression)
+        self.out.send(value)
 
     def visit_binary_expression(self, expr: Binary):
         left = self._evaluate(expr.left)
@@ -72,8 +81,11 @@ class Interpreter:
 
         raise Exception("shouldn't get here")
 
-    def _evaluate(self, expr):
-        return expr.accept(self)
+    def _execute(self, statement: Statement):
+        statement.accept(self)
+
+    def _evaluate(self, expression: Expression):
+        return expression.accept(self)
 
     def _is_truthy(self, object):
         if object is None: return False

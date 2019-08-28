@@ -32,13 +32,14 @@ class Lox:
             for token in tokens:
                 self._output(token)
 
-        expression = Parser(tokens).parse()
-        if self.print_ast:
-            ast = AstPrinter().to_string(expression)
-            self._output(ast)
+        statements = list(Parser(tokens).parse())
+        for statement in statements:
+            if self.print_ast:
+                ast = AstPrinter().to_string(statement)
+                self._output(ast)
 
         interpreter = Interpreter(self.out)
-        interpreter.interpret(expression)
+        interpreter.interpret(statements)
 
     def _output(self, data):
         self.out.send(data)
