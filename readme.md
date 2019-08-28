@@ -12,10 +12,6 @@ Run the pylox REPL:
 
 
 # todo
-- write good lox test, get passing
-- unskip all skipped tests apart from 1==1==1 bug
-- fix other tests
-- check repl works
 - bug: 1 == 1 == 1 is false due to (I think):
     - (1 == 1) == 1
     - ( True ) == 1

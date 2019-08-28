@@ -1,3 +1,6 @@
+from .statements import ExpressionStatement, PrintStatement
+
+
 class AstPrinter:
 
     def to_string(self, expression):
@@ -20,7 +23,13 @@ class AstPrinter:
     def visit_unary_expression(self, expr):
         return self._parenthesize(expr.operator.lexeme, expr.right)
 
-    def _parenthesize(self, name, *expressions):
+    def visit_expression_statement(self, stmt: ExpressionStatement):
+        return stmt.expression.accept(self)
+
+    def visit_print_statement(self, stmt: PrintStatement):
+        return self._parenthesize('print', stmt.expression)
+
+    def _parenthesize(self, name, *expressions) -> str:
         output = "(" + name
         for expression in expressions:
             output += " "
