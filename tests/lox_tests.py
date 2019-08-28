@@ -49,3 +49,14 @@ class LoxTests_Execute_Expressions(unittest.TestCase):
     def test_incomplete_expression(self):
         self.lox.execute('1 +')
         self.assertTrue('Expected expression' in self.output.last_sent)
+
+
+class LoxTests_Execute_Statements(unittest.TestCase):
+
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output = self.output)
+
+    def test_print_literal(self):
+        self.lox.execute('print "yo";')
+        self.assertEqual(self.output.last_sent, "yo")

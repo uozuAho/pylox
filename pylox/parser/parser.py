@@ -13,11 +13,11 @@ class Parser:
         self.current_idx = 0
 
     def parse(self) -> Iterator[Statement]:
-        while self._is_finished():
+        while not self._is_finished():
             yield self._statement()
 
     def _statement(self):
-        if self._current_token_is(t.PRINT):
+        if self._consume_if(t.PRINT):
             return self._print_statement()
         return self._expression_statement()
 
