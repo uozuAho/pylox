@@ -65,3 +65,14 @@ class LoxRepl:
         while True:
             line = input('> ')
             self.lox.execute(line)
+
+
+class LoxFileRunner:
+
+    def __init__(self, lox: Lox):
+        self.lox = lox
+
+    def run(self, path: str):
+        with open(path) as infile:
+            contents = infile.read()
+            self.lox.execute(contents)

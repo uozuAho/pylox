@@ -12,6 +12,7 @@ Run the pylox REPL:
 
 
 # todo
+- up to here: https://craftinginterpreters.com/statements-and-state.html
 - bug: 1 == 1 == 1 is false due to (I think):
     - (1 == 1) == 1
     - ( True ) == 1

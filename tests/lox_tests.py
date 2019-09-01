@@ -1,6 +1,7 @@
+import os
 import unittest
 
-from pylox.lox import Lox
+from pylox.lox import Lox, LoxFileRunner
 from pylox.io import NullOutputStream
 
 from test_utils.test_io import TestOutputStream
@@ -60,3 +61,17 @@ class LoxTests_Execute_Statements(unittest.TestCase):
     def test_print_literal(self):
         self.lox.execute('print "yo";')
         self.assertEqual(self.output.last_sent, "yo")
+
+
+class LoxFileRunnerTests(unittest.TestCase):
+
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output = self.output)
+        self.runner = LoxFileRunner(self.lox)
+
+    def test_run_file(self):
+        this_dir = os.path.dirname(__file__)
+        test_file = os.path.join(this_dir, 'lox_test_file.lox')
+        self.runner.run(test_file)
+        self.assertEqual(self.output.last_sent, 2.0)
