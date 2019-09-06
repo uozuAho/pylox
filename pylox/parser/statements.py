@@ -22,3 +22,11 @@ class PrintStatement(Statement):
 
     def accept(self, visitor):
         return visitor.visit_print_statement(self)
+
+class Declaration(Statement):
+    def __init__(self, name: str, expression: Expression):
+        self.name = name
+        self.expression = expression
+
+    def accept(self, visitor):
+        return visitor.visit_declaration(self)

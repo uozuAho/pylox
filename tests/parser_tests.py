@@ -2,7 +2,7 @@ import unittest
 
 from pylox.parser.parser import Parser
 from pylox.parser.expressions import Literal, Unary, Grouping, Binary
-from pylox.parser.statements import PrintStatement
+from pylox.parser.statements import PrintStatement, Declaration
 from pylox.token import Token
 from pylox.token_types import TokenTypes as t
 
@@ -121,3 +121,42 @@ class ParserTests(unittest.TestCase):
         self.assertIsInstance(expression_to_print.left, Binary)
         self.assertEqual(expression_to_print.operator.type, t.EQUAL_EQUAL)
         self.assertIsInstance(expression_to_print.right, Literal)
+
+    def test_declaration_with_expression(self):
+        tokens = [
+            Token(t.VAR, "var", None, 1),
+            Token(t.IDENTIFIER, "blah", "blah", 1),
+            Token(t.EQUAL, "=", 1, 1),
+            Token(t.NUMBER, "1", 1, 1),
+            Token(t.SEMICOLON, ";", None, 1),
+            EOF
+        ]
+
+        parser = Parser(tokens)
+        statements = list(parser.parse())
+
+        self.assertEqual(1, len(statements))
+        statement = statements[0]
+
+        self.assertIsInstance(statement, Declaration)
+        self.assertEqual(statement.name, 'blah')
+        self.assertIsInstance(statement.expression, Literal)
+        self.assertEqual(statement.expression.value, 1)
+
+    def test_declaration_without_expression(self):
+        tokens = [
+            Token(t.VAR, "var", None, 1),
+            Token(t.IDENTIFIER, "blah", "blah", 1),
+            Token(t.SEMICOLON, ";", None, 1),
+            EOF
+        ]
+
+        parser = Parser(tokens)
+        statements = list(parser.parse())
+
+        self.assertEqual(1, len(statements))
+        statement = statements[0]
+
+        self.assertIsInstance(statement, Declaration)
+        self.assertEqual(statement.name, 'blah')
+        self.assertIsNone(statement.expression)

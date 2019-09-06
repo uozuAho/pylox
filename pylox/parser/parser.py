@@ -1,7 +1,7 @@
 from typing import Iterator
 
 from .expressions import Binary, Unary, Literal, Grouping
-from .statements import Statement, PrintStatement, ExpressionStatement
+from .statements import Statement, PrintStatement, ExpressionStatement, Declaration
 from ..token_types import TokenTypes as t
 from ..token import Token
 
@@ -14,7 +14,17 @@ class Parser:
 
     def parse(self) -> Iterator[Statement]:
         while not self._is_finished():
-            yield self._statement()
+            yield self._declaration()
+
+    def _declaration(self):
+        if self._consume_if(t.VAR):
+            identifier = self._consume(t.IDENTIFIER, "expected identifier after 'var'")
+            expression = None
+            if self._consume_if(t.EQUAL):
+                expression = self._expression()
+            self._consume(t.SEMICOLON, "expected ';' after expression")
+            return Declaration(identifier.literal, expression)
+        return self._statement()
 
     def _statement(self):
         if self._consume_if(t.PRINT):
@@ -100,13 +110,13 @@ class Parser:
 
         raise ParserException(self._current_token(), "Expected expression")
 
-    def _consume(self, token_type, error_message):
+    def _consume(self, token_type, error_message) -> Token:
         if self._current_token_is(token_type):
             return self._consume_current_token()
 
         raise ParserException(self._current_token(), error_message)
 
-    def _consume_if(self, *token_types):
+    def _consume_if(self, *token_types) -> bool:
         for type in token_types:
             if self._current_token_is(type):
                 self._consume_current_token()
@@ -118,7 +128,7 @@ class Parser:
             return False
         return self._current_token().type == token_type
 
-    def _consume_current_token(self):
+    def _consume_current_token(self) -> Token:
         if not self._is_finished():
             self.current_idx += 1
         return self._previous_token()
@@ -126,10 +136,10 @@ class Parser:
     def _is_finished(self):
         return self._current_token().type == t.EOF
 
-    def _current_token(self):
+    def _current_token(self) -> Token:
         return self.tokens[self.current_idx]
 
-    def _previous_token(self):
+    def _previous_token(self) -> Token:
         return self.tokens[self.current_idx - 1]
 
     def _synchronise(self):
