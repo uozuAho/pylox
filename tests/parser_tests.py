@@ -178,4 +178,4 @@ class ParserTests(unittest.TestCase):
         statement = statements[0]
 
         self.assertIsInstance(statement, stmt.Expression)
-        self.assertIsInstance(statement.expression, expr.VariableExpression)
+        self.assertIsInstance(statement.expression, expr.Variable)

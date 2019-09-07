@@ -41,7 +41,7 @@ class Unary(Expression):
     def accept(self, visitor):
         return visitor.visit_unary_expression(self)
 
-class VariableExpression(Expression):
+class Variable(Expression):
     def __init__(self, identifier: Token):
         self.identifier = identifier
 

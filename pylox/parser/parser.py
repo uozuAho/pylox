@@ -107,7 +107,7 @@ class Parser:
             return expr.Literal(self._previous_token().literal)
 
         if self._consume_if(t.IDENTIFIER):
-            return expr.VariableExpression(self._previous_token())
+            return expr.Variable(self._previous_token())
 
         if self._consume_if(t.LEFT_PAREN):
             expression = self._expression()
