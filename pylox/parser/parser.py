@@ -1,7 +1,7 @@
 from typing import Iterator
 
 from .expressions import Binary, Unary, Literal, Grouping
-from .statements import Statement, PrintStatement, ExpressionStatement, Declaration
+from .statements import Statement, PrintStatement, ExpressionStatement, Variable
 from ..token_types import TokenTypes as t
 from ..token import Token
 
@@ -18,13 +18,16 @@ class Parser:
 
     def _declaration(self):
         if self._consume_if(t.VAR):
-            identifier = self._consume(t.IDENTIFIER, "expected identifier after 'var'")
-            expression = None
-            if self._consume_if(t.EQUAL):
-                expression = self._expression()
-            self._consume(t.SEMICOLON, "expected ';' after expression")
-            return Declaration(identifier.literal, expression)
+            return self._var_declaration()
         return self._statement()
+
+    def _var_declaration(self):
+        identifier = self._consume(t.IDENTIFIER, "expected variable name")
+        expression = None
+        if self._consume_if(t.EQUAL):
+            expression = self._expression()
+        self._consume(t.SEMICOLON, "expected ';' after variable declaration")
+        return Variable(identifier, expression)
 
     def _statement(self):
         if self._consume_if(t.PRINT):
