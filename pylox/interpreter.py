@@ -19,8 +19,8 @@ class Interpreter:
 
     def visit_variable_declaration(self, stmt: stmt.VariableDeclaration):
         value = None
-        if stmt.expression:
-            value = self._evaluate(stmt.expression)
+        if stmt.initialiser:
+            value = self._evaluate(stmt.initialiser)
         self.env.define(stmt.identifier.lexeme, value)
 
     def visit_variable_expression(self, expr: expr.Variable):

@@ -141,8 +141,8 @@ class ParserTests(unittest.TestCase):
 
         self.assertIsInstance(statement, stmt.VariableDeclaration)
         self.assertIs(statement.identifier, identifier_token)
-        self.assertIsInstance(statement.expression, expr.Literal)
-        self.assertEqual(statement.expression.value, 1)
+        self.assertIsInstance(statement.initialiser, expr.Literal)
+        self.assertEqual(statement.initialiser.value, 1)
 
     def test_declaration_without_expression(self):
         identifier_token = Token(t.IDENTIFIER, "blah", "blah", 1)
@@ -161,7 +161,7 @@ class ParserTests(unittest.TestCase):
 
         self.assertIsInstance(statement, stmt.VariableDeclaration)
         self.assertIs(statement.identifier, identifier_token)
-        self.assertIsNone(statement.expression)
+        self.assertIsNone(statement.initialiser)
 
     def test_var_expression(self):
         identifier_token = Token(t.IDENTIFIER, "blah", "blah", 1)

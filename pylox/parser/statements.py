@@ -24,9 +24,9 @@ class Print(Statement):
         return visitor.visit_print_statement(self)
 
 class VariableDeclaration(Statement):
-    def __init__(self, identifier: Token, expression: Expression):
+    def __init__(self, identifier: Token, initialiser: Expression):
         self.identifier = identifier
-        self.expression = expression
+        self.initialiser = initialiser
 
     def accept(self, visitor):
         return visitor.visit_variable_declaration(self)
