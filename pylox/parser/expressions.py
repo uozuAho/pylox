@@ -40,3 +40,10 @@ class Unary(Expression):
 
     def accept(self, visitor):
         return visitor.visit_unary_expression(self)
+
+class VariableExpression(Expression):
+    def __init__(self, identifier: Token):
+        self.identifier = identifier
+
+    def accept(self, visitor):
+        return visitor.visit_variable_expression(self)

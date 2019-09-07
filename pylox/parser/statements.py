@@ -1,4 +1,4 @@
-# from ..token import Token
+from ..token import Token
 from .expressions import Expression
 
 
@@ -22,3 +22,11 @@ class PrintStatement(Statement):
 
     def accept(self, visitor):
         return visitor.visit_print_statement(self)
+
+class Variable(Statement):
+    def __init__(self, identifier: Token, expression: Expression):
+        self.identifier = identifier
+        self.expression = expression
+
+    def accept(self, visitor):
+        return visitor.visit_variable(self)
