@@ -1,7 +1,7 @@
 from typing import Iterable
 
 from .parser.expressions import Expression, Literal, Grouping, Unary, Binary
-from .parser.statements import Statement, Expression, PrintStatement
+from .parser.statements import Statement, Expression, Print
 from .token_types import TokenTypes as t
 from .token import Token
 from .io import OutputStream, StdOutputStream
@@ -18,7 +18,7 @@ class Interpreter:
     def visit_expression_statement(self, stmt: Expression):
         self._evaluate(stmt.expression)
 
-    def visit_print_statement(self, stmt: PrintStatement):
+    def visit_print_statement(self, stmt: Print):
         value = self._evaluate(stmt.expression)
         self.out.send(value)
 

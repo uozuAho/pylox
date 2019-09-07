@@ -37,7 +37,7 @@ class Parser:
     def _print_statement(self):
         expr = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after expression")
-        return stmt.PrintStatement(expr)
+        return stmt.Print(expr)
 
     def _expression_statement(self):
         expr = self._expression()

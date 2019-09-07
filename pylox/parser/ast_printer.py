@@ -1,4 +1,4 @@
-from .statements import Expression, PrintStatement
+from .statements import Expression, Print
 
 
 class AstPrinter:
@@ -26,7 +26,7 @@ class AstPrinter:
     def visit_expression_statement(self, stmt: Expression):
         return stmt.expression.accept(self)
 
-    def visit_print_statement(self, stmt: PrintStatement):
+    def visit_print_statement(self, stmt: Print):
         return self._parenthesize('print', stmt.expression)
 
     def _parenthesize(self, name, *expressions) -> str:

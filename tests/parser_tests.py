@@ -75,7 +75,7 @@ class ParserTests(unittest.TestCase):
 
         self.assertEqual(1, len(statements))
 
-        self.assertIsInstance(statements[0], stmt.PrintStatement)
+        self.assertIsInstance(statements[0], stmt.Print)
         self.assertIsInstance(statements[0].expression, expr.Literal)
 
     def test_print_addition(self):
@@ -93,7 +93,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(1, len(statements))
         statement = statements[0]
 
-        self.assertIsInstance(statement, stmt.PrintStatement)
+        self.assertIsInstance(statement, stmt.Print)
         self.assertIsInstance(statement.expression, expr.Binary)
 
     def test_print_addition_equality_number(self):
@@ -113,7 +113,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(1, len(statements))
         statement = statements[0]
 
-        self.assertIsInstance(statement, stmt.PrintStatement)
+        self.assertIsInstance(statement, stmt.Print)
         self.assertIsInstance(statement.expression, expr.Binary)
 
         expression_to_print = statement.expression

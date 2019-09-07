@@ -16,7 +16,7 @@ class Expression(Statement):
     def accept(self, visitor):
         return visitor.visit_expression_statement(self)
 
-class PrintStatement(Statement):
+class Print(Statement):
     def __init__(self, expression: Expression):
         self.expression = expression
 
