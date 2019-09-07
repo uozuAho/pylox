@@ -27,7 +27,7 @@ class Parser:
         if self._consume_if(t.EQUAL):
             expression = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after variable declaration")
-        return stmt.Variable(identifier, expression)
+        return stmt.VariableDeclaration(identifier, expression)
 
     def _statement(self):
         if self._consume_if(t.PRINT):

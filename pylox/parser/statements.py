@@ -23,7 +23,7 @@ class Print(Statement):
     def accept(self, visitor):
         return visitor.visit_print_statement(self)
 
-class Variable(Statement):
+class VariableDeclaration(Statement):
     def __init__(self, identifier: Token, expression: Expression):
         self.identifier = identifier
         self.expression = expression
