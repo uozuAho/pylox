@@ -1,7 +1,7 @@
 from typing import Iterable
 
-from .parser.expressions import Expression, Literal, Grouping, Unary, Binary
-from .parser.statements import Statement, Expression, Print
+from .parser import expressions as expr
+from .parser import statements as stmt
 from .token_types import TokenTypes as t
 from .token import Token
 from .io import OutputStream, StdOutputStream
@@ -11,18 +11,18 @@ class Interpreter:
     def __init__(self, output: OutputStream=None):
         self.out = output or StdOutputStream()
 
-    def interpret(self, statements: Iterable[Statement]):
+    def interpret(self, statements: Iterable[stmt.Statement]):
         for statement in statements:
             self._execute(statement)
 
-    def visit_expression_statement(self, stmt: Expression):
+    def visit_expression_statement(self, stmt: stmt.Expression):
         self._evaluate(stmt.expression)
 
-    def visit_print_statement(self, stmt: Print):
+    def visit_print_statement(self, stmt: stmt.Print):
         value = self._evaluate(stmt.expression)
         self.out.send(value)
 
-    def visit_binary_expression(self, expr: Binary):
+    def visit_binary_expression(self, expr: expr.Binary):
         left = self._evaluate(expr.left)
         right = self._evaluate(expr.right)
 
@@ -63,13 +63,13 @@ class Interpreter:
 
         raise Exception("shouldn't get here")
 
-    def visit_grouping_expression(self, expr: Grouping):
+    def visit_grouping_expression(self, expr: expr.Grouping):
         return self._evaluate(expr.expression)
 
-    def visit_literal_expression(self, expr: Literal):
+    def visit_literal_expression(self, expr: expr.Literal):
         return expr.value
 
-    def visit_unary_expression(self, expr: Unary):
+    def visit_unary_expression(self, expr: expr.Unary):
         right = self._evaluate(expr.right)
 
         if expr.operator.type == t.MINUS:
@@ -81,10 +81,10 @@ class Interpreter:
 
         raise Exception("shouldn't get here")
 
-    def _execute(self, statement: Statement):
+    def _execute(self, statement: stmt.Statement):
         statement.accept(self)
 
-    def _evaluate(self, expression: Expression):
+    def _evaluate(self, expression: expr.Expression):
         return expression.accept(self)
 
     def _is_truthy(self, object):
@@ -101,13 +101,13 @@ class Interpreter:
             return False
         return left == right
 
-    def _ensure_number_operands(self, expr: Expression, token: Token, left, right):
+    def _ensure_number_operands(self, expr: expr.Expression, token: Token, left, right):
         if type(left) is float and type(right) is float: return
         raise InterpreterException(expr, token, 'operands must be numbers')
 
 
 class InterpreterException(Exception):
-    def __init__(self, expression: Expression, token: Token, message: str):
+    def __init__(self, expression: expr.Expression, token: Token, message: str):
         self.expression = expression
         self.token = token
         self.message = message
