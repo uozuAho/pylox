@@ -9,7 +9,7 @@ class Statement:
         """ Uses visitor pattern to extend statement functionality """
         pass
 
-class ExpressionStatement(Statement):
+class Expression(Statement):
     def __init__(self, expression: Expression):
         self.expression = expression
 

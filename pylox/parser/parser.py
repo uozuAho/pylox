@@ -1,7 +1,7 @@
 from typing import Iterator
 
-from .expressions import Binary, Unary, Literal, Grouping, VariableExpression
-from .statements import Statement, PrintStatement, ExpressionStatement, Variable
+from . import expressions as expr
+from . import statements as stmt
 from ..token_types import TokenTypes as t
 from ..token import Token
 
@@ -12,7 +12,7 @@ class Parser:
         self.tokens = [tk for tk in tokens if tk.type not in ignore_tokens]
         self.current_idx = 0
 
-    def parse(self) -> Iterator[Statement]:
+    def parse(self) -> Iterator[stmt.Statement]:
         while not self._is_finished():
             yield self._declaration()
 
@@ -27,7 +27,7 @@ class Parser:
         if self._consume_if(t.EQUAL):
             expression = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after variable declaration")
-        return Variable(identifier, expression)
+        return stmt.Variable(identifier, expression)
 
     def _statement(self):
         if self._consume_if(t.PRINT):
@@ -37,12 +37,12 @@ class Parser:
     def _print_statement(self):
         expr = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after expression")
-        return PrintStatement(expr)
+        return stmt.PrintStatement(expr)
 
     def _expression_statement(self):
         expr = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after expression")
-        return ExpressionStatement(expr)
+        return stmt.Expression(expr)
 
     def _expression(self):
         return self._equality()
@@ -53,7 +53,7 @@ class Parser:
         while self._consume_if(t.BANG_EQUAL, t.EQUAL_EQUAL):
             operator = self._previous_token()
             right = self._comparison()
-            expression = Binary(expression, operator, right)
+            expression = expr.Binary(expression, operator, right)
 
         return expression
 
@@ -63,7 +63,7 @@ class Parser:
         while self._consume_if(t.GREATER, t.GREATER_EQUAL, t.LESS, t.LESS_EQUAL):
             operator = self._previous_token()
             right = self._addition()
-            expression = Binary(expression, operator, right)
+            expression = expr.Binary(expression, operator, right)
 
         return expression
 
@@ -73,7 +73,7 @@ class Parser:
         while self._consume_if(t.MINUS, t.PLUS):
             operator = self._previous_token()
             right = self._multiplication()
-            expression = Binary(expression, operator, right)
+            expression = expr.Binary(expression, operator, right)
 
         return expression
 
@@ -83,7 +83,7 @@ class Parser:
         while self._consume_if(t.SLASH, t.STAR):
             operator = self._previous_token()
             right = self._unary()
-            expression = Binary(expression, operator, right)
+            expression = expr.Binary(expression, operator, right)
 
         return expression
 
@@ -91,28 +91,28 @@ class Parser:
         if self._consume_if(t.BANG, t.MINUS):
             operator = self._previous_token()
             right = self._unary()
-            return Unary(operator, right)
+            return expr.Unary(operator, right)
 
         return self._primary()
 
     def _primary(self):
         if self._consume_if(t.FALSE):
-            return Literal(False)
+            return expr.Literal(False)
         if self._consume_if(t.TRUE):
-            return Literal(True)
+            return expr.Literal(True)
         if self._consume_if(t.NIL):
-            return Literal(None)
+            return expr.Literal(None)
 
         if self._consume_if(t.NUMBER, t.STRING):
-            return Literal(self._previous_token().literal)
+            return expr.Literal(self._previous_token().literal)
 
         if self._consume_if(t.IDENTIFIER):
-            return VariableExpression(self._previous_token())
+            return expr.VariableExpression(self._previous_token())
 
         if self._consume_if(t.LEFT_PAREN):
             expression = self._expression()
             self._consume(t.RIGHT_PAREN, "Expected ')' after expression")
-            return Grouping(expression)
+            return expr.Grouping(expression)
 
         raise ParserException(self._current_token(), "Expected expression")
 

@@ -177,5 +177,5 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(1, len(statements))
         statement = statements[0]
 
-        self.assertIsInstance(statement, stmt.ExpressionStatement)
+        self.assertIsInstance(statement, stmt.Expression)
         self.assertIsInstance(statement.expression, expr.VariableExpression)
