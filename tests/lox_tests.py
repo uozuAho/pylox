@@ -63,6 +63,28 @@ class LoxTests_Execute_Statements(unittest.TestCase):
         self.assertEqual(self.output.last_sent, "yo")
 
 
+class LoxTests_Variables(unittest.TestCase):
+
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output = self.output)
+
+    def test_declare_then_print(self):
+        self.lox.execute('var a;')
+        self.lox.execute('print a;')
+        self.assertEqual(self.output.last_sent, "nil")
+
+    def test_declare_with_initialiser_then_print(self):
+        self.lox.execute('var a = 1;')
+        self.lox.execute('print a;')
+        self.assertEqual(self.output.last_sent, 1)
+
+    def test_declare_with_initialiser_expression_then_print(self):
+        self.lox.execute('var a = 1 + 1;')
+        self.lox.execute('print a;')
+        self.assertEqual(self.output.last_sent, 2)
+
+
 class LoxFileRunnerTests(unittest.TestCase):
 
     def setUp(self):

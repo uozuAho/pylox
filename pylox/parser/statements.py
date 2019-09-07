@@ -29,4 +29,4 @@ class VariableDeclaration(Statement):
         self.expression = expression
 
     def accept(self, visitor):
-        return visitor.visit_variable(self)
+        return visitor.visit_variable_declaration(self)

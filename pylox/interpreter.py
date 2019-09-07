@@ -5,21 +5,34 @@ from .parser import statements as stmt
 from .token_types import TokenTypes as t
 from .token import Token
 from .io import OutputStream, StdOutputStream
+from .environment import Environment
 
 
 class Interpreter:
-    def __init__(self, output: OutputStream=None):
+    def __init__(self, output: OutputStream=None, environment: Environment=None):
         self.out = output or StdOutputStream()
+        self.env = environment or Environment()
 
     def interpret(self, statements: Iterable[stmt.Statement]):
         for statement in statements:
             self._execute(statement)
+
+    def visit_variable_declaration(self, stmt: stmt.VariableDeclaration):
+        value = None
+        if stmt.expression:
+            value = self._evaluate(stmt.expression)
+        self.env.define(stmt.identifier.lexeme, value)
+
+    def visit_variable_expression(self, expr: expr.Variable):
+        return self.env.get(expr.identifier)
 
     def visit_expression_statement(self, stmt: stmt.Expression):
         self._evaluate(stmt.expression)
 
     def visit_print_statement(self, stmt: stmt.Print):
         value = self._evaluate(stmt.expression)
+        if value is None:
+            value = 'nil'
         self.out.send(value)
 
     def visit_binary_expression(self, expr: expr.Binary):

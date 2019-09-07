@@ -10,6 +10,7 @@ class Lox:
 
     def __init__(self, output: OutputStream=None, debug: bool=False):
         self.out = output or StdOutputStream()
+        self.interpreter = Interpreter(self.out)
         self.print_tokens = debug
         self.print_ast = debug
 
@@ -38,8 +39,7 @@ class Lox:
                 ast = AstPrinter().to_string(statement)
                 self._output(ast)
 
-        interpreter = Interpreter(self.out)
-        interpreter.interpret(statements)
+        self.interpreter.interpret(statements)
 
     def _output(self, data):
         self.out.send(data)
