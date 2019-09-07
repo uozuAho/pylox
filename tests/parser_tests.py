@@ -1,8 +1,8 @@
 import unittest
 
 from pylox.parser.parser import Parser
-from pylox.parser.expressions import Literal, Unary, Grouping, Binary
-from pylox.parser.statements import PrintStatement, Variable
+from pylox.parser.expressions import Literal, Unary, Grouping, Binary, VariableExpression
+from pylox.parser.statements import PrintStatement, Variable, ExpressionStatement
 from pylox.token import Token
 from pylox.token_types import TokenTypes as t
 
@@ -162,3 +162,20 @@ class ParserTests(unittest.TestCase):
         self.assertIsInstance(statement, Variable)
         self.assertIs(statement.identifier, identifier_token)
         self.assertIsNone(statement.expression)
+
+    def test_var_expression(self):
+        identifier_token = Token(t.IDENTIFIER, "blah", "blah", 1)
+        tokens = [
+            identifier_token,
+            Token(t.SEMICOLON, ";", None, 1),
+            EOF
+        ]
+
+        parser = Parser(tokens)
+        statements = list(parser.parse())
+
+        self.assertEqual(1, len(statements))
+        statement = statements[0]
+
+        self.assertIsInstance(statement, ExpressionStatement)
+        self.assertIsInstance(statement.expression, VariableExpression)

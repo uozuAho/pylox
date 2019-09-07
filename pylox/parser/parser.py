@@ -1,6 +1,6 @@
 from typing import Iterator
 
-from .expressions import Binary, Unary, Literal, Grouping
+from .expressions import Binary, Unary, Literal, Grouping, VariableExpression
 from .statements import Statement, PrintStatement, ExpressionStatement, Variable
 from ..token_types import TokenTypes as t
 from ..token import Token
@@ -105,6 +105,9 @@ class Parser:
 
         if self._consume_if(t.NUMBER, t.STRING):
             return Literal(self._previous_token().literal)
+
+        if self._consume_if(t.IDENTIFIER):
+            return VariableExpression(self._previous_token())
 
         if self._consume_if(t.LEFT_PAREN):
             expression = self._expression()
