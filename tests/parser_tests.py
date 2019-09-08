@@ -198,3 +198,25 @@ class ParserTests(unittest.TestCase):
 
         self.assertIsInstance(stmt, statements.Expression)
         self.assertIsInstance(stmt.expression, expressions.Assignment)
+
+    def test_single_block_with_two_statements(self):
+        tokens = [
+            Token(t.LEFT_BRACE, '{', None, 1),
+            Token(t.PRINT, 'print', None, 1),
+            Token(t.STRING, 'blah', 'blah', 1),
+            Token(t.SEMICOLON, ";", None, 1),
+            Token(t.PRINT, 'print', None, 1),
+            Token(t.STRING, 'blah', 'blah', 1),
+            Token(t.SEMICOLON, ";", None, 1),
+            Token(t.RIGHT_BRACE, '}', None, 1),
+            EOF
+        ]
+
+        parser = Parser(tokens)
+        stmts = list(parser.parse())
+
+        self.assertEqual(1, len(stmts))
+        block = stmts[0]
+
+        self.assertIsInstance(block, statements.Block)
+        self.assertEqual(len(block.statements), 2)

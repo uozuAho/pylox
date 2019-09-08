@@ -1,3 +1,5 @@
+from typing import List
+
 from ..token import Token
 from .expressions import Expression
 
@@ -30,3 +32,10 @@ class VariableDeclaration(Statement):
 
     def accept(self, visitor):
         return visitor.visit_variable_declaration(self)
+
+class Block(Statement):
+    def __init__(self, statements: List[Statement]):
+        self.statements = statements
+
+    def accept(self, visitor):
+        return visitor.visit_block(self)

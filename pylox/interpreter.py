@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, List
 
 from .parser import expressions
 from .parser import statements
@@ -39,6 +39,9 @@ class Interpreter:
         if value is None:
             value = 'nil'
         self.out.send(value)
+
+    def visit_block(self, block: statements.Block):
+        self._execute_block(block.statements, Environment(self.env))
 
     def visit_binary_expression(self, expr: expressions.Binary):
         left = self._evaluate(expr.left)
@@ -101,6 +104,16 @@ class Interpreter:
 
     def _execute(self, statement: statements.Statement):
         statement.accept(self)
+
+    def _execute_block(self, stmts: List[statements.Statement], environment: Environment):
+        backup_env = self.env
+        try:
+            self.env = environment
+
+            for stmt in stmts:
+                self._execute(stmt)
+        finally:
+            self.env = backup_env
 
     def _evaluate(self, expression: expressions.Expression):
         return expression.accept(self)

@@ -1,4 +1,4 @@
-from typing import Iterator
+from typing import Iterator, List
 
 from . import expressions
 from . import statements
@@ -32,7 +32,18 @@ class Parser:
     def _statement(self):
         if self._consume_if(t.PRINT):
             return self._print_statement()
+        if self._consume_if(t.LEFT_BRACE):
+            return statements.Block(self._block())
         return self._expression_statement()
+
+    def _block(self) -> List[statements.Statement]:
+        stmts = []
+
+        while not self._current_token_is(t.RIGHT_BRACE) and not self._is_finished():
+            stmts.append(self._declaration())
+
+        self._consume(t.RIGHT_BRACE, "Expected '}' after block.");
+        return stmts
 
     def _print_statement(self):
         expr = self._expression()

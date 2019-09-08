@@ -103,6 +103,26 @@ class LoxTests_Variables(unittest.TestCase):
         self.lox.execute('a + b = 3;')
         self.assertIn('Invalid assignment target', self.output.last_sent)
 
+
+class LoxTests_Scoping(unittest.TestCase):
+
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output = self.output)
+
+    def test_reuse_name_in_inner_scope(self):
+        self.lox.execute('var a = 1;')
+        self.lox.execute('{ var a = 2; print a; }')
+        self.assertEqual(self.output.last_sent, 2)
+        self.lox.execute('print a;')
+        self.assertEqual(self.output.last_sent, 1)
+
+    def test_assign_outer_in_inner_scope(self):
+        self.lox.execute('var a = 1;')
+        self.lox.execute('{ a = 2; }')
+        self.lox.execute('print a;')
+        self.assertEqual(self.output.last_sent, 2)
+
 class LoxFileRunnerTests(unittest.TestCase):
 
     def setUp(self):
