@@ -84,6 +84,18 @@ class LoxTests_Variables(unittest.TestCase):
         self.lox.execute('print a;')
         self.assertEqual(self.output.last_sent, 2)
 
+    def test_declare_then_assign(self):
+        self.lox.execute('var a = 1;')
+        self.lox.execute('print a;')
+        self.assertEqual(self.output.last_sent, 1)
+        self.lox.execute('a = "asdf";')
+        self.lox.execute('print a;')
+        self.assertEqual(self.output.last_sent, 'asdf')
+
+    def test_bad_assign_target_should_print_error(self):
+        self.lox.execute('var a; var b;')
+        self.lox.execute('a + b = 3;')
+        self.assertIn('Invalid assignment target', self.output.last_sent)
 
 class LoxFileRunnerTests(unittest.TestCase):
 
