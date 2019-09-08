@@ -1,8 +1,8 @@
 import unittest
 
 from pylox.parser.parser import Parser
-import pylox.parser.expressions as expr
-import pylox.parser.statements as stmt
+from pylox.parser import expressions
+from pylox.parser import statements
 from pylox.token import Token
 from pylox.token_types import TokenTypes as t
 
@@ -23,7 +23,7 @@ class ParserTests(unittest.TestCase):
         statement = statements[0]
         expression = statement.expression
 
-        self.assertIsInstance(expression, expr.Literal)
+        self.assertIsInstance(expression, expressions.Literal)
 
     def test_unary_negative_number(self):
         tokens = [
@@ -39,9 +39,9 @@ class ParserTests(unittest.TestCase):
         statement = statements[0]
         expression = statement.expression
 
-        self.assertIsInstance(expression, expr.Unary)
+        self.assertIsInstance(expression, expressions.Unary)
         self.assertEqual(expression.operator.type, t.MINUS)
-        self.assertIsInstance(expression.right, expr.Literal)
+        self.assertIsInstance(expression.right, expressions.Literal)
         self.assertEqual(expression.right.value, 1)
 
     def test_grouping_unary_negative_number(self):
@@ -60,8 +60,8 @@ class ParserTests(unittest.TestCase):
         statement = statements[0]
         expression = statement.expression
 
-        self.assertIsInstance(expression, expr.Grouping)
-        self.assertIsInstance(expression.expression, expr.Unary)
+        self.assertIsInstance(expression, expressions.Grouping)
+        self.assertIsInstance(expression.expression, expressions.Unary)
 
     def test_print_string_literal(self):
         tokens = [
@@ -71,12 +71,12 @@ class ParserTests(unittest.TestCase):
             EOF
         ]
         parser = Parser(tokens)
-        statements = list(parser.parse())
+        stmts = list(parser.parse())
 
-        self.assertEqual(1, len(statements))
+        self.assertEqual(1, len(stmts))
 
-        self.assertIsInstance(statements[0], stmt.Print)
-        self.assertIsInstance(statements[0].expression, expr.Literal)
+        self.assertIsInstance(stmts[0], statements.Print)
+        self.assertIsInstance(stmts[0].expression, expressions.Literal)
 
     def test_print_addition(self):
         tokens = [
@@ -88,13 +88,13 @@ class ParserTests(unittest.TestCase):
             EOF
         ]
         parser = Parser(tokens)
-        statements = list(parser.parse())
+        stmts = list(parser.parse())
 
-        self.assertEqual(1, len(statements))
-        statement = statements[0]
+        self.assertEqual(1, len(stmts))
+        stmt = stmts[0]
 
-        self.assertIsInstance(statement, stmt.Print)
-        self.assertIsInstance(statement.expression, expr.Binary)
+        self.assertIsInstance(stmt, statements.Print)
+        self.assertIsInstance(stmt.expression, expressions.Binary)
 
     def test_print_addition_equality_number(self):
         tokens = [
@@ -108,19 +108,19 @@ class ParserTests(unittest.TestCase):
             EOF
         ]
         parser = Parser(tokens)
-        statements = list(parser.parse())
+        stmts = list(parser.parse())
 
-        self.assertEqual(1, len(statements))
-        statement = statements[0]
+        self.assertEqual(1, len(stmts))
+        stmt = stmts[0]
 
-        self.assertIsInstance(statement, stmt.Print)
-        self.assertIsInstance(statement.expression, expr.Binary)
+        self.assertIsInstance(stmt, statements.Print)
+        self.assertIsInstance(stmt.expression, expressions.Binary)
 
-        expression_to_print = statement.expression
+        expression_to_print = stmt.expression
 
-        self.assertIsInstance(expression_to_print.left, expr.Binary)
+        self.assertIsInstance(expression_to_print.left, expressions.Binary)
         self.assertEqual(expression_to_print.operator.type, t.EQUAL_EQUAL)
-        self.assertIsInstance(expression_to_print.right, expr.Literal)
+        self.assertIsInstance(expression_to_print.right, expressions.Literal)
 
     def test_declaration_with_expression(self):
         identifier_token = Token(t.IDENTIFIER, "blah", "blah", 1)
@@ -134,15 +134,15 @@ class ParserTests(unittest.TestCase):
         ]
 
         parser = Parser(tokens)
-        statements = list(parser.parse())
+        stmts = list(parser.parse())
 
-        self.assertEqual(1, len(statements))
-        statement = statements[0]
+        self.assertEqual(1, len(stmts))
+        stmt = stmts[0]
 
-        self.assertIsInstance(statement, stmt.VariableDeclaration)
-        self.assertIs(statement.identifier, identifier_token)
-        self.assertIsInstance(statement.initialiser, expr.Literal)
-        self.assertEqual(statement.initialiser.value, 1)
+        self.assertIsInstance(stmt, statements.VariableDeclaration)
+        self.assertIs(stmt.identifier, identifier_token)
+        self.assertIsInstance(stmt.initialiser, expressions.Literal)
+        self.assertEqual(stmt.initialiser.value, 1)
 
     def test_declaration_without_expression(self):
         identifier_token = Token(t.IDENTIFIER, "blah", "blah", 1)
@@ -154,14 +154,14 @@ class ParserTests(unittest.TestCase):
         ]
 
         parser = Parser(tokens)
-        statements = list(parser.parse())
+        stmts = list(parser.parse())
 
-        self.assertEqual(1, len(statements))
-        statement = statements[0]
+        self.assertEqual(1, len(stmts))
+        stmt = stmts[0]
 
-        self.assertIsInstance(statement, stmt.VariableDeclaration)
-        self.assertIs(statement.identifier, identifier_token)
-        self.assertIsNone(statement.initialiser)
+        self.assertIsInstance(stmt, statements.VariableDeclaration)
+        self.assertIs(stmt.identifier, identifier_token)
+        self.assertIsNone(stmt.initialiser)
 
     def test_var_expression(self):
         identifier_token = Token(t.IDENTIFIER, "blah", "blah", 1)
@@ -172,13 +172,13 @@ class ParserTests(unittest.TestCase):
         ]
 
         parser = Parser(tokens)
-        statements = list(parser.parse())
+        stmts = list(parser.parse())
 
-        self.assertEqual(1, len(statements))
-        statement = statements[0]
+        self.assertEqual(1, len(stmts))
+        statement = stmts[0]
 
-        self.assertIsInstance(statement, stmt.Expression)
-        self.assertIsInstance(statement.expression, expr.Variable)
+        self.assertIsInstance(statement, statements.Expression)
+        self.assertIsInstance(statement.expression, expressions.Variable)
 
     def test_assignment_expression(self):
         identifier_token = Token(t.IDENTIFIER, "blah", "blah", 1)
@@ -191,10 +191,10 @@ class ParserTests(unittest.TestCase):
         ]
 
         parser = Parser(tokens)
-        statements = list(parser.parse())
+        stmts = list(parser.parse())
 
-        self.assertEqual(1, len(statements))
-        statement = statements[0]
+        self.assertEqual(1, len(stmts))
+        stmt = stmts[0]
 
-        self.assertIsInstance(statement, stmt.Expression)
-        self.assertIsInstance(statement.expression, expr.Assignment)
+        self.assertIsInstance(stmt, statements.Expression)
+        self.assertIsInstance(stmt.expression, expressions.Assignment)

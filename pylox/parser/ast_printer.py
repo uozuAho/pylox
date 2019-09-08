@@ -1,4 +1,4 @@
-from .statements import Expression, Print
+from . import statements
 
 
 class AstPrinter:
@@ -23,10 +23,10 @@ class AstPrinter:
     def visit_unary_expression(self, expr):
         return self._parenthesize(expr.operator.lexeme, expr.right)
 
-    def visit_expression_statement(self, stmt: Expression):
+    def visit_expression_statement(self, stmt: statements.Expression):
         return stmt.expression.accept(self)
 
-    def visit_print_statement(self, stmt: Print):
+    def visit_print_statement(self, stmt: statements.Print):
         return self._parenthesize('print', stmt.expression)
 
     def _parenthesize(self, name, *expressions) -> str:

@@ -1,7 +1,7 @@
 from typing import Iterator
 
-from . import expressions as expr
-from . import statements as stmt
+from . import expressions
+from . import statements
 from ..token_types import TokenTypes as t
 from ..token import Token
 
@@ -12,7 +12,7 @@ class Parser:
         self.tokens = [tk for tk in tokens if tk.type not in ignore_tokens]
         self.current_idx = 0
 
-    def parse(self) -> Iterator[stmt.Statement]:
+    def parse(self) -> Iterator[statements.Statement]:
         while not self._is_finished():
             yield self._declaration()
 
@@ -27,7 +27,7 @@ class Parser:
         if self._consume_if(t.EQUAL):
             expression = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after variable declaration")
-        return stmt.VariableDeclaration(identifier, expression)
+        return statements.VariableDeclaration(identifier, expression)
 
     def _statement(self):
         if self._consume_if(t.PRINT):
@@ -37,12 +37,12 @@ class Parser:
     def _print_statement(self):
         expr = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after expression")
-        return stmt.Print(expr)
+        return statements.Print(expr)
 
     def _expression_statement(self):
         expr = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after expression")
-        return stmt.Expression(expr)
+        return statements.Expression(expr)
 
     def _expression(self):
         return self._assignment()
@@ -54,9 +54,9 @@ class Parser:
             equals = self._previous_token()
             value = self._assignment();
 
-            if isinstance(expression, expr.Variable):
+            if isinstance(expression, expressions.Variable):
                 identifier = expression.identifier;
-                return expr.Assignment(identifier, value);
+                return expressions.Assignment(identifier, value);
 
             raise ParserException(equals, "Invalid assignment target.");
 
@@ -68,7 +68,7 @@ class Parser:
         while self._consume_if(t.BANG_EQUAL, t.EQUAL_EQUAL):
             operator = self._previous_token()
             right = self._comparison()
-            expression = expr.Binary(expression, operator, right)
+            expression = expressions.Binary(expression, operator, right)
 
         return expression
 
@@ -78,7 +78,7 @@ class Parser:
         while self._consume_if(t.GREATER, t.GREATER_EQUAL, t.LESS, t.LESS_EQUAL):
             operator = self._previous_token()
             right = self._addition()
-            expression = expr.Binary(expression, operator, right)
+            expression = expressions.Binary(expression, operator, right)
 
         return expression
 
@@ -88,7 +88,7 @@ class Parser:
         while self._consume_if(t.MINUS, t.PLUS):
             operator = self._previous_token()
             right = self._multiplication()
-            expression = expr.Binary(expression, operator, right)
+            expression = expressions.Binary(expression, operator, right)
 
         return expression
 
@@ -98,7 +98,7 @@ class Parser:
         while self._consume_if(t.SLASH, t.STAR):
             operator = self._previous_token()
             right = self._unary()
-            expression = expr.Binary(expression, operator, right)
+            expression = expressions.Binary(expression, operator, right)
 
         return expression
 
@@ -106,28 +106,28 @@ class Parser:
         if self._consume_if(t.BANG, t.MINUS):
             operator = self._previous_token()
             right = self._unary()
-            return expr.Unary(operator, right)
+            return expressions.Unary(operator, right)
 
         return self._primary()
 
     def _primary(self):
         if self._consume_if(t.FALSE):
-            return expr.Literal(False)
+            return expressions.Literal(False)
         if self._consume_if(t.TRUE):
-            return expr.Literal(True)
+            return expressions.Literal(True)
         if self._consume_if(t.NIL):
-            return expr.Literal(None)
+            return expressions.Literal(None)
 
         if self._consume_if(t.NUMBER, t.STRING):
-            return expr.Literal(self._previous_token().literal)
+            return expressions.Literal(self._previous_token().literal)
 
         if self._consume_if(t.IDENTIFIER):
-            return expr.Variable(self._previous_token())
+            return expressions.Variable(self._previous_token())
 
         if self._consume_if(t.LEFT_PAREN):
             expression = self._expression()
             self._consume(t.RIGHT_PAREN, "Expected ')' after expression")
-            return expr.Grouping(expression)
+            return expressions.Grouping(expression)
 
         raise ParserException(self._current_token(), "Expected expression")
 
