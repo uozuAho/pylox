@@ -45,7 +45,22 @@ class Parser:
         return stmt.Expression(expr)
 
     def _expression(self):
-        return self._equality()
+        return self._assignment()
+
+    def _assignment(self):
+        expression = self._equality()
+
+        if self._consume_if(t.EQUAL):
+            equals = self._previous_token()
+            value = self._assignment();
+
+            if isinstance(expression, expr.Variable):
+                identifier = expression.identifier;
+                return expr.Assignment(identifier, value);
+
+            raise ParserException(equals, "Invalid assignment target.");
+
+        return expression
 
     def _equality(self):
         expression = self._comparison()

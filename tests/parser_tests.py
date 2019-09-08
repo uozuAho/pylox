@@ -179,3 +179,22 @@ class ParserTests(unittest.TestCase):
 
         self.assertIsInstance(statement, stmt.Expression)
         self.assertIsInstance(statement.expression, expr.Variable)
+
+    def test_assignment_expression(self):
+        identifier_token = Token(t.IDENTIFIER, "blah", "blah", 1)
+        tokens = [
+            identifier_token,
+            Token(t.EQUAL, "=", None, 1),
+            Token(t.NUMBER, "4", 4, 1),
+            Token(t.SEMICOLON, ";", None, 1),
+            EOF
+        ]
+
+        parser = Parser(tokens)
+        statements = list(parser.parse())
+
+        self.assertEqual(1, len(statements))
+        statement = statements[0]
+
+        self.assertIsInstance(statement, stmt.Expression)
+        self.assertIsInstance(statement.expression, expr.Assignment)

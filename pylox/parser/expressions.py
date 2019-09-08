@@ -47,3 +47,11 @@ class Variable(Expression):
 
     def accept(self, visitor):
         return visitor.visit_variable_expression(self)
+
+class Assignment(Expression):
+    def __init__(self, identifier: Token, expression: Expression):
+        self.identifier = identifier
+        self.expression = expression
+
+    def accept(self, visitor):
+        return visitor.visit_assignment_expression(self)
