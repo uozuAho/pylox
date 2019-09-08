@@ -11,13 +11,19 @@ class Environment:
         self.values[name] = value
 
     def assign(self, name: Token, value):
-        if name.lexeme not in self.values:
-            raise EnvironmentException(f"Undefined variable {name.lexeme}")
-        self.values[name.lexeme] = value
+        if name.lexeme in self.values:
+            self.values[name.lexeme] = value
+            return
+        if self.parent:
+            self.parent.assign(name, value)
+            return
+        raise EnvironmentException(f"Undefined variable {name.lexeme}")
 
     def get(self, name: Token):
         if name.lexeme in self.values:
             return self.values[name.lexeme]
+        if self.parent:
+            return self.parent.get(name)
         raise EnvironmentException(f"Undefined variable {name.lexeme}")
 
 

@@ -12,8 +12,9 @@ Run the pylox REPL:
 
 
 # todo
-- up to here: https://craftinginterpreters.com/statements-and-state.html#scope
+- up to here: https://craftinginterpreters.com/statements-and-state.html#block-syntax-and-semantics
 - repl: parameter for debug verbosity on/off
+- repl: don't throw on undefined var
 - parser error recovery: https://craftinginterpreters.com/statements-and-state.html#parsing-variables
     - try catch in declaration. throw for now?
 - bug: 1 == 1 == 1 is false due to (I think):
