@@ -92,8 +92,10 @@ class LoxTests_Variables(unittest.TestCase):
         self.lox.execute('print a;')
         self.assertEqual(self.output.last_sent, 'asdf')
 
-    # todo: a + b = 3 should fail
-
+    def test_bad_assign_target_should_print_error(self):
+        self.lox.execute('var a; var b;')
+        self.lox.execute('a + b = 3;')
+        self.assertIn('Invalid assignment target', self.output.last_sent)
 
 class LoxFileRunnerTests(unittest.TestCase):
 
