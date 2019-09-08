@@ -24,11 +24,9 @@ class Interpreter:
         self.env.define(stmt.identifier.lexeme, value)
 
     def visit_assignment_expression(self, expr: expressions.Assignment):
-        # ensure var exists
-        self.env.get(expr.identifier)
         value = self._evaluate(expr.expression)
-        # todo: make a set method
-        self.env.define(expr.identifier.lexeme, value)
+        self.env.assign(expr.identifier, value)
+        return value
 
     def visit_variable_expression(self, expr: expressions.Variable):
         return self.env.get(expr.identifier)

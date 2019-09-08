@@ -92,6 +92,12 @@ class LoxTests_Variables(unittest.TestCase):
         self.lox.execute('print a;')
         self.assertEqual(self.output.last_sent, 'asdf')
 
+    def test_can_print_assignment(self):
+        # assignment is an expression, so has a value
+        self.lox.execute('var a = 1;')
+        self.lox.execute('print a = 2;')
+        self.assertEqual(self.output.last_sent, 2)
+
     def test_bad_assign_target_should_print_error(self):
         self.lox.execute('var a; var b;')
         self.lox.execute('a + b = 3;')

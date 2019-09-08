@@ -12,11 +12,10 @@ Run the pylox REPL:
 
 
 # todo
-- rename 'expr' imports to expressions. same for stmt
+- up to here: https://craftinginterpreters.com/statements-and-state.html#scope
 - repl: parameter for debug verbosity on/off
 - parser error recovery: https://craftinginterpreters.com/statements-and-state.html#parsing-variables
     - try catch in declaration. throw for now?
-- up to here: https://craftinginterpreters.com/statements-and-state.html#assignment
 - bug: 1 == 1 == 1 is false due to (I think):
     - (1 == 1) == 1
     - ( True ) == 1
