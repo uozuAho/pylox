@@ -84,6 +84,16 @@ class LoxTests_Variables(unittest.TestCase):
         self.lox.execute('print a;')
         self.assertEqual(self.output.last_sent, 2)
 
+    def test_declare_then_assign(self):
+        self.lox.execute('var a = 1;')
+        self.lox.execute('print a;')
+        self.assertEqual(self.output.last_sent, 1)
+        self.lox.execute('a = "asdf";')
+        self.lox.execute('print a;')
+        self.assertEqual(self.output.last_sent, 'asdf')
+
+    # todo: a + b = 3 should fail
+
 
 class LoxFileRunnerTests(unittest.TestCase):
 

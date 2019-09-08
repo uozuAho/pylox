@@ -13,6 +13,7 @@ Run the pylox REPL:
 
 # todo
 - rename 'expr' imports to expressions. same for stmt
+- repl: parameter for debug verbosity on/off
 - parser error recovery: https://craftinginterpreters.com/statements-and-state.html#parsing-variables
     - try catch in declaration. throw for now?
 - up to here: https://craftinginterpreters.com/statements-and-state.html#assignment
