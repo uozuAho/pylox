@@ -40,6 +40,12 @@ class Interpreter:
             value = 'nil'
         self.out.send(value)
 
+    def visit_if(self, stmt: statements.If):
+        if self._is_truthy(self._evaluate(stmt.condition)):
+            self._execute(stmt.thenBranch)
+        elif stmt.elseBranch:
+            self._execute(stmt.elseBranch)
+
     def visit_block(self, block: statements.Block):
         self._execute_block(block.statements, Environment(self.env))
 
