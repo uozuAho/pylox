@@ -39,3 +39,12 @@ class Block(Statement):
 
     def accept(self, visitor):
         return visitor.visit_block(self)
+
+class If(Statement):
+    def __init__(self, condition: Expression, thenBranch: Statement, elseBranch: Statement):
+        self.condition = condition
+        self.thenBranch = thenBranch
+        self.elseBranch = elseBranch
+
+    def accept(self, visitor):
+        return visitor.visit_if(self)

@@ -30,11 +30,25 @@ class Parser:
         return statements.VariableDeclaration(identifier, expression)
 
     def _statement(self):
+        if self._consume_if(t.IF):
+            return self._if_statement()
         if self._consume_if(t.PRINT):
             return self._print_statement()
         if self._consume_if(t.LEFT_BRACE):
             return statements.Block(self._block())
         return self._expression_statement()
+
+    def _if_statement(self):
+        self._consume(t.LEFT_PAREN, "Expected '(' after 'if'.")
+        condition = self._expression()
+        self._consume(t.RIGHT_PAREN, "Expected ')' after if condition.")
+
+        then_branch = self._statement()
+        else_branch = None
+        if (self._consume_if(t.ELSE)):
+            else_branch = self._statement()
+
+        return statements.If(condition, then_branch, else_branch)
 
     def _block(self) -> List[statements.Statement]:
         stmts = []

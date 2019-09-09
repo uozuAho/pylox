@@ -123,6 +123,19 @@ class LoxTests_Scoping(unittest.TestCase):
         self.lox.execute('print a;')
         self.assertEqual(self.output.last_sent, 2)
 
+
+class LoxTests_IfElse(unittest.TestCase):
+
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output = self.output)
+
+    def test_if_else(self):
+        self.lox.execute('if (true) print "true"; else print "false";')
+        self.assertEqual(self.output.last_sent, "true")
+
+    # test nested ifelse
+
 class LoxFileRunnerTests(unittest.TestCase):
 
     def setUp(self):
