@@ -123,6 +123,31 @@ class LoxTests_Scoping(unittest.TestCase):
         self.lox.execute('print a;')
         self.assertEqual(self.output.last_sent, 2)
 
+
+class LoxTests_IfElse(unittest.TestCase):
+
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output = self.output)
+
+    def test_if_true_else(self):
+        self.lox.execute('if (true) print "true"; else print "false";')
+        self.assertEqual(self.output.last_sent, "true")
+
+    def test_if_false_else(self):
+        self.lox.execute('if (false) print "true"; else print "false";')
+        self.assertEqual(self.output.last_sent, "false")
+
+    def test_nested_if_else_should_grab_earliest_else(self):
+        self.lox.execute("""
+            if (true)
+                if (true)
+                    print "this should get printed";
+                else
+                    print "this should not get printed";
+            """)
+        self.assertEqual(self.output.last_sent, "this should get printed")
+
 class LoxFileRunnerTests(unittest.TestCase):
 
     def setUp(self):
