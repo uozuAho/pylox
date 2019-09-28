@@ -220,3 +220,27 @@ class ParserTests(unittest.TestCase):
 
         self.assertIsInstance(block, statements.Block)
         self.assertEqual(len(block.statements), 2)
+
+    def test_logical_operator_expression(self):
+        tokens = [
+            Token(t.PRINT, 'print', None, 1),
+            Token(t.FALSE, 'false', None, 1),
+            Token(t.AND, ";", None, 1),
+            Token(t.STRING, 'hello', None, 1),
+            Token(t.SEMICOLON, ";", None, 1),
+            EOF
+        ]
+
+        parser = Parser(tokens)
+        stmts = list(parser.parse())
+
+        self.assertEqual(1, len(stmts))
+        print_stmt = stmts[0]
+
+        self.assertIsInstance(print_stmt, statements.Print)
+        self.assertIsInstance(print_stmt.expression, expressions.Logical)
+
+        logical = print_stmt.expression
+        self.assertIsInstance(logical.left, expressions.Literal)
+        self.assertIsInstance(logical.operator, Token)
+        self.assertIsInstance(logical.right, expressions.Literal)

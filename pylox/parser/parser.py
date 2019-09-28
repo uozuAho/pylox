@@ -73,7 +73,7 @@ class Parser:
         return self._assignment()
 
     def _assignment(self):
-        expression = self._equality()
+        expression = self._or()
 
         if self._consume_if(t.EQUAL):
             equals = self._previous_token()
@@ -84,6 +84,26 @@ class Parser:
                 return expressions.Assignment(identifier, value);
 
             raise ParserException(equals, "Invalid assignment target.");
+
+        return expression
+
+    def _or(self):
+        expression = self._and()
+
+        while(self._consume_if(t.OR)):
+            operator = self._previous_token()
+            right = self._and()
+            expression = expressions.Logical(expression, operator, right)
+
+        return expression
+
+    def _and(self):
+        expression = self._equality()
+
+        while(self._consume_if(t.AND)):
+            operator = self._previous_token()
+            right = self._equality()
+            expression = expressions.Logical(expression, operator, right)
 
         return expression
 

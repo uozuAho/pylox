@@ -12,7 +12,7 @@ Run the pylox REPL:
 
 
 # todo
-- up to here: https://craftinginterpreters.com/control-flow.html#conditional-execution
+- up to here: https://craftinginterpreters.com/control-flow.html#logical-operators
 - repl: parameter for debug verbosity on/off
 - repl: don't throw on undefined var
 - parser error recovery: https://craftinginterpreters.com/statements-and-state.html#parsing-variables

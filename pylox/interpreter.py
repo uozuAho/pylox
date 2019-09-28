@@ -108,6 +108,16 @@ class Interpreter:
 
         raise Exception("shouldn't get here")
 
+    def visit_logical_expression(self, expr: expressions.Logical):
+        left = self._evaluate(expr.left)
+
+        if expr.operator.type == t.OR:
+            if self._is_truthy(left): return left
+        else:
+            if not self._is_truthy(left): return left
+
+        return self._evaluate(expr.right)
+
     def _execute(self, statement: statements.Statement):
         statement.accept(self)
 

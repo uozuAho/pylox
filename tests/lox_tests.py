@@ -160,3 +160,17 @@ class LoxFileRunnerTests(unittest.TestCase):
         test_file = os.path.join(this_dir, 'lox_test_file.lox')
         self.runner.run(test_file)
         self.assertEqual(self.output.last_sent, 2.0)
+
+class LoxTests_LogicalOperators(unittest.TestCase):
+
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output = self.output)
+
+    def test_print_false_and_1(self):
+        self.lox.execute('print false and 1;')
+        self.assertEqual(self.output.last_sent, False)
+
+    def test_print_true_and_1(self):
+        self.lox.execute('print true and 1;')
+        self.assertEqual(self.output.last_sent, 1)

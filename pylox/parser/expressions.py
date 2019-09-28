@@ -55,3 +55,12 @@ class Assignment(Expression):
 
     def accept(self, visitor):
         return visitor.visit_assignment_expression(self)
+
+class Logical(Expression):
+    def __init__(self, left: Expression, operator: Token, right: Expression):
+        self.left = left
+        self.operator = operator
+        self.right = right
+
+    def accept(self, visitor):
+        return visitor.visit_logical_expression(self)
