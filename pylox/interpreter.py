@@ -46,6 +46,10 @@ class Interpreter:
         elif stmt.elseBranch:
             self._execute(stmt.elseBranch)
 
+    def visit_while(self, stmt: statements.While):
+        while self._is_truthy(self._evaluate(stmt.condition)):
+            self._execute(stmt.body)
+
     def visit_block(self, block: statements.Block):
         self._execute_block(block.statements, Environment(self.env))
 

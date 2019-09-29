@@ -48,3 +48,11 @@ class If(Statement):
 
     def accept(self, visitor):
         return visitor.visit_if(self)
+
+class While(Statement):
+    def __init__(self, condition: Expression, body: Statement):
+        self.condition = condition
+        self.body = body
+
+    def accept(self, visitor):
+        return visitor.visit_while(self)

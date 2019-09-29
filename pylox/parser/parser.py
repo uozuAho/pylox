@@ -32,6 +32,8 @@ class Parser:
     def _statement(self):
         if self._consume_if(t.IF):
             return self._if_statement()
+        if self._consume_if(t.WHILE):
+            return self._while_statement()
         if self._consume_if(t.PRINT):
             return self._print_statement()
         if self._consume_if(t.LEFT_BRACE):
@@ -49,6 +51,14 @@ class Parser:
             else_branch = self._statement()
 
         return statements.If(condition, then_branch, else_branch)
+
+    def _while_statement(self):
+        self._consume(t.LEFT_PAREN, "Expected '(' after 'while'.")
+        condition = self._expression()
+        self._consume(t.RIGHT_PAREN, "Expected ')' after while condition.")
+
+        body = self._statement()
+        return statements.While(condition, body)
 
     def _block(self) -> List[statements.Statement]:
         stmts = []

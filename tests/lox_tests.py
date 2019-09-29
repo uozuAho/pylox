@@ -174,3 +174,23 @@ class LoxTests_LogicalOperators(unittest.TestCase):
     def test_print_true_and_1(self):
         self.lox.execute('print true and 1;')
         self.assertEqual(self.output.last_sent, 1)
+
+class LoxTests_WhileLoops(unittest.TestCase):
+
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output = self.output)
+
+    def test_while_var_one_loop(self):
+        self.lox.execute('var do_loop = true;')
+        self.lox.execute('while (do_loop) { print 1; do_loop = false; }')
+        self.assertEqual(self.output.last_sent, 1)
+
+    def test_while_false_does_nothing(self):
+        self.lox.execute('while (false) print 1;')
+        self.assertEqual(self.output.num_sent(), 0)
+
+    def test_while_loops_multiple_times(self):
+        self.lox.execute('var temp = 5;')
+        self.lox.execute('while (temp > 0) { print 1; temp = temp - 1; }')
+        self.assertEqual(self.output.num_sent(), 5)

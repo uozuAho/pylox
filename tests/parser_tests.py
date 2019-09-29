@@ -244,3 +244,23 @@ class ParserTests(unittest.TestCase):
         self.assertIsInstance(logical.left, expressions.Literal)
         self.assertIsInstance(logical.operator, Token)
         self.assertIsInstance(logical.right, expressions.Literal)
+
+    def test_while_true_statement(self):
+        tokens = [
+            Token(t.WHILE, 'while', None, 1),
+            Token(t.LEFT_PAREN, '(', None, 1),
+            Token(t.TRUE, "true", True, 1),
+            Token(t.RIGHT_PAREN, ')', None, 1),
+            Token(t.PRINT, "print", None, 1),
+            Token(t.NUMBER, "1", 1, 1),
+            Token(t.SEMICOLON, ";", None, 1),
+            EOF
+        ]
+
+        parser = Parser(tokens)
+        stmts = list(parser.parse())
+
+        self.assertEqual(1, len(stmts))
+        while_stmt = stmts[0]
+
+        self.assertIsInstance(while_stmt, statements.While)
