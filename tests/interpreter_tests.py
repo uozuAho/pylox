@@ -5,11 +5,12 @@ from pylox.parser.expressions import Grouping, Literal, Unary, Binary
 from pylox.token import Token
 from pylox.token_types import TokenTypes as t
 
+
 def new_token(type):
     return Token(type, None, None, 1)
 
-class InterpreterTests_Expressions(unittest.TestCase):
 
+class InterpreterTests_Expressions(unittest.TestCase):
     def setUp(self):
         self.interpreter = Interpreter()
 
@@ -44,7 +45,6 @@ class InterpreterTests_Expressions(unittest.TestCase):
 
 
 class InterpreterTests_BinaryEqualityExpressions(unittest.TestCase):
-
     def setUp(self):
         self.interpreter = Interpreter()
 
@@ -69,13 +69,15 @@ class InterpreterTests_BinaryEqualityExpressions(unittest.TestCase):
 
         self.assertEqual(result, False)
 
-    @unittest.skip('this is a known issue (see readme). Hopefully gets fixed in blog...')
+    @unittest.skip(
+        "this is a known issue (see readme). Hopefully gets fixed in blog..."
+    )
     def test_double_equality(self):
         # 1 == 1 == 1
         comparison = Binary(
             Binary(Literal(1), new_token(t.EQUAL_EQUAL), Literal(1)),
             new_token(t.EQUAL_EQUAL),
-            Literal(1)
+            Literal(1),
         )
 
         result = self.interpreter.visit_binary_expression(comparison)
@@ -84,7 +86,6 @@ class InterpreterTests_BinaryEqualityExpressions(unittest.TestCase):
 
 
 class InterpreterTests_BinaryExpressions(unittest.TestCase):
-
     def setUp(self):
         self.interpreter = Interpreter()
 

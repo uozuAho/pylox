@@ -8,13 +8,13 @@ from pylox.token_types import TokenTypes as t
 
 EOF = Token(t.EOF, None, None, None)
 
-class ParserTests(unittest.TestCase):
 
+class ParserTests(unittest.TestCase):
     def test_single_string(self):
         tokens = [
             Token(t.STRING, "asdf", "asdf", 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
         parser = Parser(tokens)
         statements = list(parser.parse())
@@ -30,7 +30,7 @@ class ParserTests(unittest.TestCase):
             Token(t.MINUS, "-", None, 1),
             Token(t.NUMBER, "1", 1, 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
         parser = Parser(tokens)
         statements = list(parser.parse())
@@ -51,7 +51,7 @@ class ParserTests(unittest.TestCase):
             Token(t.NUMBER, "1", 1, 1),
             Token(t.RIGHT_PAREN, ")", None, 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
         parser = Parser(tokens)
         statements = list(parser.parse())
@@ -68,7 +68,7 @@ class ParserTests(unittest.TestCase):
             Token(t.PRINT, "print", None, 1),
             Token(t.STRING, "yo", None, 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
         parser = Parser(tokens)
         stmts = list(parser.parse())
@@ -85,7 +85,7 @@ class ParserTests(unittest.TestCase):
             Token(t.PLUS, "+", None, 1),
             Token(t.NUMBER, "1", 1, 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
         parser = Parser(tokens)
         stmts = list(parser.parse())
@@ -105,7 +105,7 @@ class ParserTests(unittest.TestCase):
             Token(t.EQUAL_EQUAL, "==", None, 1),
             Token(t.NUMBER, "2", 2, 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
         parser = Parser(tokens)
         stmts = list(parser.parse())
@@ -130,7 +130,7 @@ class ParserTests(unittest.TestCase):
             Token(t.EQUAL, "=", 1, 1),
             Token(t.NUMBER, "1", 1, 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
 
         parser = Parser(tokens)
@@ -150,7 +150,7 @@ class ParserTests(unittest.TestCase):
             Token(t.VAR, "var", None, 1),
             identifier_token,
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
 
         parser = Parser(tokens)
@@ -165,11 +165,7 @@ class ParserTests(unittest.TestCase):
 
     def test_var_expression(self):
         identifier_token = Token(t.IDENTIFIER, "blah", "blah", 1)
-        tokens = [
-            identifier_token,
-            Token(t.SEMICOLON, ";", None, 1),
-            EOF
-        ]
+        tokens = [identifier_token, Token(t.SEMICOLON, ";", None, 1), EOF]
 
         parser = Parser(tokens)
         stmts = list(parser.parse())
@@ -187,7 +183,7 @@ class ParserTests(unittest.TestCase):
             Token(t.EQUAL, "=", None, 1),
             Token(t.NUMBER, "4", 4, 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
 
         parser = Parser(tokens)
@@ -201,15 +197,15 @@ class ParserTests(unittest.TestCase):
 
     def test_single_block_with_two_statements(self):
         tokens = [
-            Token(t.LEFT_BRACE, '{', None, 1),
-            Token(t.PRINT, 'print', None, 1),
-            Token(t.STRING, 'blah', 'blah', 1),
+            Token(t.LEFT_BRACE, "{", None, 1),
+            Token(t.PRINT, "print", None, 1),
+            Token(t.STRING, "blah", "blah", 1),
             Token(t.SEMICOLON, ";", None, 1),
-            Token(t.PRINT, 'print', None, 1),
-            Token(t.STRING, 'blah', 'blah', 1),
+            Token(t.PRINT, "print", None, 1),
+            Token(t.STRING, "blah", "blah", 1),
             Token(t.SEMICOLON, ";", None, 1),
-            Token(t.RIGHT_BRACE, '}', None, 1),
-            EOF
+            Token(t.RIGHT_BRACE, "}", None, 1),
+            EOF,
         ]
 
         parser = Parser(tokens)
@@ -223,12 +219,12 @@ class ParserTests(unittest.TestCase):
 
     def test_logical_operator_expression(self):
         tokens = [
-            Token(t.PRINT, 'print', None, 1),
-            Token(t.FALSE, 'false', None, 1),
+            Token(t.PRINT, "print", None, 1),
+            Token(t.FALSE, "false", None, 1),
             Token(t.AND, ";", None, 1),
-            Token(t.STRING, 'hello', None, 1),
+            Token(t.STRING, "hello", None, 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
 
         parser = Parser(tokens)
@@ -247,14 +243,14 @@ class ParserTests(unittest.TestCase):
 
     def test_while_true_statement(self):
         tokens = [
-            Token(t.WHILE, 'while', None, 1),
-            Token(t.LEFT_PAREN, '(', None, 1),
+            Token(t.WHILE, "while", None, 1),
+            Token(t.LEFT_PAREN, "(", None, 1),
             Token(t.TRUE, "true", True, 1),
-            Token(t.RIGHT_PAREN, ')', None, 1),
+            Token(t.RIGHT_PAREN, ")", None, 1),
             Token(t.PRINT, "print", None, 1),
             Token(t.NUMBER, "1", 1, 1),
             Token(t.SEMICOLON, ";", None, 1),
-            EOF
+            EOF,
         ]
 
         parser = Parser(tokens)

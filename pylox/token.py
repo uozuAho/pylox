@@ -6,4 +6,4 @@ class Token:
         self.line = line
 
     def __str__(self):
-        return '{o.type} {o.lexeme} {o.literal}'.format(o=self)
+        return "{o.type} {o.lexeme} {o.literal}".format(o=self)

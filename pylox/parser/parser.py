@@ -47,7 +47,7 @@ class Parser:
 
         then_branch = self._statement()
         else_branch = None
-        if (self._consume_if(t.ELSE)):
+        if self._consume_if(t.ELSE):
             else_branch = self._statement()
 
         return statements.If(condition, then_branch, else_branch)
@@ -66,7 +66,7 @@ class Parser:
         while not self._current_token_is(t.RIGHT_BRACE) and not self._is_finished():
             stmts.append(self._declaration())
 
-        self._consume(t.RIGHT_BRACE, "Expected '}' after block.");
+        self._consume(t.RIGHT_BRACE, "Expected '}' after block.")
         return stmts
 
     def _print_statement(self):
@@ -87,20 +87,19 @@ class Parser:
 
         if self._consume_if(t.EQUAL):
             equals = self._previous_token()
-            value = self._assignment();
-
+            value = self._assignment()
             if isinstance(expression, expressions.Variable):
-                identifier = expression.identifier;
-                return expressions.Assignment(identifier, value);
+                identifier = expression.identifier
+                return expressions.Assignment(identifier, value)
 
-            raise ParserException(equals, "Invalid assignment target.");
+            raise ParserException(equals, "Invalid assignment target.")
 
         return expression
 
     def _or(self):
         expression = self._and()
 
-        while(self._consume_if(t.OR)):
+        while self._consume_if(t.OR):
             operator = self._previous_token()
             right = self._and()
             expression = expressions.Logical(expression, operator, right)
@@ -110,7 +109,7 @@ class Parser:
     def _and(self):
         expression = self._equality()
 
-        while(self._consume_if(t.AND)):
+        while self._consume_if(t.AND):
             operator = self._previous_token()
             right = self._equality()
             expression = expressions.Logical(expression, operator, right)
@@ -234,7 +233,7 @@ class Parser:
                 t.IF,
                 t.WHILE,
                 t.PRINT,
-                t.RETURN
+                t.RETURN,
             ]:
                 return
 

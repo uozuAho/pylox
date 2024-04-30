@@ -12,4 +12,4 @@ if __name__ == "__main__":
     elif len(args) == 1:
         lox.run_file(args[0])
     else:
-        print('nah')
+        print("nah")

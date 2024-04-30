@@ -3,7 +3,7 @@ from .token import Token
 
 
 class Environment:
-    def __init__(self, parent: Environment=None):
+    def __init__(self, parent: Environment = None):
         self.parent = parent
         self.values = {}
 

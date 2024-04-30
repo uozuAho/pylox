@@ -2,7 +2,6 @@ from . import statements
 
 
 class AstPrinter:
-
     def to_string(self, expression):
         return expression.accept(self)
 
@@ -16,7 +15,7 @@ class AstPrinter:
         return self._parenthesize("group", expr.expression)
 
     def visit_literal_expression(self, expr):
-        if (expr.value == None):
+        if expr.value == None:
             return "nil"
         return str(expr.value)
 
@@ -27,7 +26,7 @@ class AstPrinter:
         return stmt.expression.accept(self)
 
     def visit_print_statement(self, stmt: statements.Print):
-        return self._parenthesize('print', stmt.expression)
+        return self._parenthesize("print", stmt.expression)
 
     def _parenthesize(self, name, *expressions) -> str:
         output = "(" + name

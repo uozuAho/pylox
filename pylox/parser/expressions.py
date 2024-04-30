@@ -1,11 +1,13 @@
 from ..token import Token
 
+
 class Expression:
-    """ abstract expression """
+    """abstract expression"""
 
     def accept(self, visitor):
-        """ Uses visitor pattern to extend expression functionality """
+        """Uses visitor pattern to extend expression functionality"""
         pass
+
 
 class Binary(Expression):
     def __init__(self, left: Expression, operator: Token, right: Expression):
@@ -16,12 +18,14 @@ class Binary(Expression):
     def accept(self, visitor):
         return visitor.visit_binary_expression(self)
 
+
 class Grouping(Expression):
     def __init__(self, expression: Expression):
         self.expression = expression
 
     def accept(self, visitor):
         return visitor.visit_grouping_expression(self)
+
 
 class Literal(Expression):
     def __init__(self, value):
@@ -33,6 +37,7 @@ class Literal(Expression):
     def accept(self, visitor):
         return visitor.visit_literal_expression(self)
 
+
 class Unary(Expression):
     def __init__(self, operator: Token, right: Expression):
         self.operator = operator
@@ -41,12 +46,14 @@ class Unary(Expression):
     def accept(self, visitor):
         return visitor.visit_unary_expression(self)
 
+
 class Variable(Expression):
     def __init__(self, identifier: Token):
         self.identifier = identifier
 
     def accept(self, visitor):
         return visitor.visit_variable_expression(self)
+
 
 class Assignment(Expression):
     def __init__(self, identifier: Token, expression: Expression):
@@ -55,6 +62,7 @@ class Assignment(Expression):
 
     def accept(self, visitor):
         return visitor.visit_assignment_expression(self)
+
 
 class Logical(Expression):
     def __init__(self, left: Expression, operator: Token, right: Expression):

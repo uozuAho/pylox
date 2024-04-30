@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class TokenTypes(Enum):
     # Single-character tokens
     LEFT_PAREN = 1
@@ -51,4 +52,4 @@ class TokenTypes(Enum):
     WHITESPACE = 40
     NEWLINE = 41
 
-    EOF  = 9999
+    EOF = 9999
