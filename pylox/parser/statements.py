@@ -12,7 +12,7 @@ class Statement:
         pass
 
 
-class Expression(Statement):
+class ExpressionStatement(Statement):
     def __init__(self, expression: Expression):
         self.expression = expression
 

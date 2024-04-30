@@ -77,7 +77,7 @@ class Parser:
     def _expression_statement(self):
         expr = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after expression")
-        return statements.Expression(expr)
+        return statements.ExpressionStatement(expr)
 
     def _expression(self):
         return self._assignment()

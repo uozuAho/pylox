@@ -173,7 +173,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(1, len(stmts))
         statement = stmts[0]
 
-        self.assertIsInstance(statement, statements.Expression)
+        self.assertIsInstance(statement, statements.ExpressionStatement)
         self.assertIsInstance(statement.expression, expressions.Variable)
 
     def test_assignment_expression(self):
@@ -192,7 +192,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(1, len(stmts))
         stmt = stmts[0]
 
-        self.assertIsInstance(stmt, statements.Expression)
+        self.assertIsInstance(stmt, statements.ExpressionStatement)
         self.assertIsInstance(stmt.expression, expressions.Assignment)
 
     def test_single_block_with_two_statements(self):

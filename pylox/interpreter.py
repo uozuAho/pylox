@@ -1,4 +1,4 @@
-from typing import Iterable, List
+import typing as typ
 
 from .parser import expressions
 from .parser import statements
@@ -9,11 +9,14 @@ from .environment import Environment
 
 
 class Interpreter:
-    def __init__(self, output: OutputStream = None, environment: Environment = None):
+    def __init__(
+            self,
+            output: typ.Optional[OutputStream] = None,
+            environment: typ.Optional[Environment] = None):
         self.out = output or StdOutputStream()
         self.env = environment or Environment()
 
-    def interpret(self, statements: Iterable[statements.Statement]):
+    def interpret(self, statements: typ.Iterable[statements.Statement]):
         for statement in statements:
             self._execute(statement)
 
@@ -31,7 +34,7 @@ class Interpreter:
     def visit_variable_expression(self, expr: expressions.Variable):
         return self.env.get(expr.identifier)
 
-    def visit_expression_statement(self, stmt: statements.Expression):
+    def visit_expression_statement(self, stmt: statements.ExpressionStatement):
         self._evaluate(stmt.expression)
 
     def visit_print_statement(self, stmt: statements.Print):
@@ -132,7 +135,7 @@ class Interpreter:
         statement.accept(self)
 
     def _execute_block(
-        self, stmts: List[statements.Statement], environment: Environment
+        self, stmts: typ.List[statements.Statement], environment: Environment
     ):
         backup_env = self.env
         try:
