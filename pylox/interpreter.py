@@ -24,6 +24,8 @@ class Interpreter:
         value = None
         if stmt.initialiser:
             value = self._evaluate(stmt.initialiser)
+        if not stmt.identifier.lexeme:
+            raise InterpreterException(stmt.initialiser, stmt.identifier, "Identifier must not be empty")
         self.env.define(stmt.identifier.lexeme, value)
 
     def visit_assignment_expression(self, expr: expressions.Assignment):
