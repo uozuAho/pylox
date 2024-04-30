@@ -29,7 +29,7 @@ class Grouping(Expression):
 
 class Literal(Expression):
     def __init__(self, value):
-        if type(value) is int:
+        if type(value) is int:  # noqa: E721   # for some reason, isinstance breaks this
             self.value = float(value)
         else:
             self.value = value

@@ -114,8 +114,7 @@ class InterpreterTests_BinaryExpressions(unittest.TestCase):
         binary = Binary(Literal(1), new_token(t.PLUS), Literal("kitty"))
 
         with self.assertRaises(InterpreterException) as context:
-            result = self.interpreter.visit_binary_expression(binary)
-
+            self.interpreter.visit_binary_expression(binary)
             self.assertEqual(context.expression, binary)
 
     def test_comparison(self):

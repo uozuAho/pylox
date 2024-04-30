@@ -224,7 +224,6 @@ class Parser:
             if self._previous_token() == t.SEMICOLON:
                 return
 
-            current_token_type = self._current_token().type
             if self._current_token().type in [
                 t.CLASS,
                 t.FUN,

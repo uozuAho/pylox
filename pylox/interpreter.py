@@ -106,7 +106,7 @@ class Interpreter:
         right = self._evaluate(expr.right)
 
         if expr.operator.type == t.MINUS:
-            if type(right) is not float:
+            if not isinstance(right, float):
                 raise InterpreterException(
                     expr, expr.operator, "operand must be a number"
                 )
@@ -165,7 +165,7 @@ class Interpreter:
     def _ensure_number_operands(
         self, expr: expressions.Expression, token: Token, left, right
     ):
-        if type(left) is float and type(right) is float:
+        if isinstance(left, float) and isinstance(right, float):
             return
         raise InterpreterException(expr, token, "operands must be numbers")
 

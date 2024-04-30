@@ -2,7 +2,6 @@ import os
 import unittest
 
 from pylox.lox import Lox, LoxFileRunner
-from pylox.io import NullOutputStream
 
 from test_utils.test_io import TestOutputStream
 
