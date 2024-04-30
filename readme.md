@@ -12,11 +12,16 @@ Install required programs:
 ```sh
 ./make.sh test
 ./make.sh help
+
+# before committing
+./make.sh test
+./make.sh format
+./make.sh lint
 ```
 
 # todo
+- WIP: type/lint/test fixes
 - WIP: document a crash course
-- add mypy + ruff
 - up to here: https://craftinginterpreters.com/control-flow.html#logical-operators
 - repl: parameter for debug verbosity on/off
 - repl: don't throw on undefined var

@@ -1,5 +1,14 @@
+import typing as t
+
+from .token_types import TokenTypes
+
 class Token:
-    def __init__(self, type, lexeme, literal, line):
+    def __init__(
+            self,
+            type: TokenTypes,
+            lexeme: t.Optional[str],
+            literal: t.Optional[str],
+            line: int):
         self.type = type
         self.lexeme = lexeme
         self.literal = literal
