@@ -21,7 +21,9 @@ Install required programs:
 
 # todo
 - WIP: type/lint/test fixes
+    - see inline todos "todo: type"
 - WIP: document a crash course
+    - see [](/docs/crash-course.md)
 - up to here: https://craftinginterpreters.com/control-flow.html#logical-operators
 - repl: parameter for debug verbosity on/off
 - repl: don't throw on undefined var
