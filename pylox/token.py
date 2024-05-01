@@ -15,7 +15,7 @@ class Token:
     def __init__(
             self,
             type: TokenTypes,
-            lexeme: t.Optional[str],   # todo: type: shouldn't be optional?
+            lexeme: str,
             literal: t.Optional[str],  # todo: type: should be Optional[IDENTIFIER | STRING | NUMBER] ?
             line: int):
         self.type = type

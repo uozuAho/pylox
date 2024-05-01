@@ -6,7 +6,7 @@ from pylox.parser import statements
 from pylox.token import Token
 from pylox.token_types import TokenTypes as t
 
-EOF = Token(t.EOF, None, None, 9999)
+EOF = Token(t.EOF, "", None, 9999)
 
 
 class ParserTests(unittest.TestCase):

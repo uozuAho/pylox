@@ -7,7 +7,7 @@ from pylox.token_types import TokenTypes as t
 
 
 def new_token(type):
-    return Token(type, None, None, 1)
+    return Token(type, "", None, 1)
 
 
 class InterpreterTests_Expressions(unittest.TestCase):
