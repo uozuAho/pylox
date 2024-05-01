@@ -1,5 +1,3 @@
-import typing as t
-
 from .token_types import TokenTypes
 
 class Token:
@@ -16,7 +14,7 @@ class Token:
             self,
             type: TokenTypes,
             lexeme: str,
-            literal: t.Optional[str],  # todo: type: should be Optional[IDENTIFIER | STRING | NUMBER] ?
+            literal: str | float | None,
             line: int):
         self.type = type
         self.lexeme = lexeme
