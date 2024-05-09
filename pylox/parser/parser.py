@@ -243,3 +243,6 @@ class ParserException(Exception):
     def __init__(self, token: Token, message: str):
         self.token = token
         self.message = message
+
+    def __str__(self):
+        return f"On line {self.token.line}, '{self.token.lexeme}': {self.message}"
