@@ -1,5 +1,6 @@
 class OutputStream:
-    """ abstract io 'interface' """
+    """abstract io 'interface'"""
+
     def send(self, data):
         pass
 

@@ -1,15 +1,26 @@
 # pylox interpreter
 
-My first implementation of lox from https://craftinginterpreters.com, using python.
+My implementation of lox from https://craftinginterpreters.com, using python.
 
-Running tests:
+# quick start
+Install required programs:
+- [python](https://www.python.org/)
+    - last tested with 3.12
+- bash-compatible shell
+    - my go-to is [git for windows](https://git-scm.com/download/win)
 
-    ./run_tests.sh
+```sh
+./make.sh test
+./make.sh help
 
-Run the pylox REPL:
+# before committing
+./make.sh test
+./make.sh format
+./make.sh lint
+```
 
-    python pylox.py
-
+# crash course
+See the [crash course](/docs/crash-course.md)
 
 # todo
 - up to here: https://craftinginterpreters.com/control-flow.html#logical-operators
@@ -21,12 +32,3 @@ Run the pylox REPL:
     - (1 == 1) == 1
     - ( True ) == 1
     - = False
-
-# fun stuff for later
-
-- python to javascript
-    - try first, then look for existing tools
-- python to bash
-- python to webassembly
-- c# to webassembly
-    - what does blazor do?

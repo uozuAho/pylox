@@ -1,3 +1,5 @@
+import typing as typ
+
 from .scanner import Scanner
 from .parser.parser import Parser, ParserException
 from .interpreter import Interpreter, InterpreterException
@@ -7,8 +9,10 @@ from .io import OutputStream, StdOutputStream
 
 
 class Lox:
-
-    def __init__(self, output: OutputStream=None, debug: bool=False):
+    def __init__(
+            self,
+            output: typ.Optional[OutputStream] = None,
+            debug: bool = False):
         self.out = output or StdOutputStream()
         self.interpreter = Interpreter(self.out)
         self.print_tokens = debug
@@ -46,10 +50,10 @@ class Lox:
 
     def _parser_exception_to_message(self, exception: ParserException):
         if exception.token.type == t.EOF:
-            position_msg = 'at end of file'
+            position_msg = "at end of file"
         else:
             position_msg = f'at token "{exception.token.lexeme}"'
-        return f'{position_msg}: {exception.message}'
+        return f"{position_msg}: {exception.message}"
 
     def _interpreter_exception_to_message(self, exception: InterpreterException):
         expression_str = AstPrinter().to_string(exception.expression)
@@ -57,18 +61,16 @@ class Lox:
 
 
 class LoxRepl:
-
     def __init__(self, lox: Lox):
         self.lox = lox
 
     def run(self):
         while True:
-            line = input('> ')
+            line = input("> ")
             self.lox.execute(line)
 
 
 class LoxFileRunner:
-
     def __init__(self, lox: Lox):
         self.lox = lox
 

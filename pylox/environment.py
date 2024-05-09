@@ -1,11 +1,12 @@
 from __future__ import annotations
 from .token import Token
+import typing as t
 
 
 class Environment:
-    def __init__(self, parent: Environment=None):
+    def __init__(self, parent: t.Optional[Environment] = None):
         self.parent = parent
-        self.values = {}
+        self.values: t.Dict[str, t.Any] = {}
 
     def define(self, name: str, value):
         self.values[name] = value
