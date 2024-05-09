@@ -3,6 +3,7 @@ import unittest
 from pylox.parser.parser import Parser
 from pylox.parser import expressions
 from pylox.parser import statements
+from pylox.scanner import Scanner
 from pylox.token import Token
 from pylox.token_types import TokenTypes as t
 
@@ -260,3 +261,12 @@ class ParserTests(unittest.TestCase):
         while_stmt = stmts[0]
 
         self.assertIsInstance(while_stmt, statements.While)
+
+    def test_for_loop(self):
+        tokens = Scanner("""for (var i = 0; i < 1; i++) {
+                                print "boop";
+                            }
+                         """).scan_tokens()
+        parser = Parser(tokens)
+        statements = list(parser.parse())
+        self.assertEqual(1, len(statements))
