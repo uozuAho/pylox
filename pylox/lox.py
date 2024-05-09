@@ -9,10 +9,7 @@ from .io import OutputStream, StdOutputStream
 
 
 class Lox:
-    def __init__(
-            self,
-            output: typ.Optional[OutputStream] = None,
-            debug: bool = False):
+    def __init__(self, output: typ.Optional[OutputStream] = None, debug: bool = False):
         self.out = output or StdOutputStream()
         self.interpreter = Interpreter(self.out)
         self.print_tokens = debug

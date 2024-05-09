@@ -1,21 +1,20 @@
 from .token_types import TokenTypes
 
+
 class Token:
-    """ A 'word' of the language. May be one or more characters. For all the
-        tokens of lox, see TokenTypes.
+    """A 'word' of the language. May be one or more characters. For all the
+    tokens of lox, see TokenTypes.
 
-        https://craftinginterpreters.com/scanning.html#lexemes-and-tokens
+    https://craftinginterpreters.com/scanning.html#lexemes-and-tokens
 
-        lexeme:  group of characters that make up the token
-        literal: where applicable, the interpreter's representation of the
-                 lexeme, eg number values
+    lexeme:  group of characters that make up the token
+    literal: where applicable, the interpreter's representation of the
+             lexeme, eg number values
     """
+
     def __init__(
-            self,
-            type: TokenTypes,
-            lexeme: str,
-            literal: str | float | None,
-            line: int):
+        self, type: TokenTypes, lexeme: str, literal: str | float | None, line: int
+    ):
         self.type = type
         self.lexeme = lexeme
         self.literal = literal

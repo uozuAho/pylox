@@ -10,9 +10,10 @@ from .environment import Environment
 
 class Interpreter:
     def __init__(
-            self,
-            output: typ.Optional[OutputStream] = None,
-            environment: typ.Optional[Environment] = None):
+        self,
+        output: typ.Optional[OutputStream] = None,
+        environment: typ.Optional[Environment] = None,
+    ):
         self.out = output or StdOutputStream()
         self.env = environment or Environment()
 
@@ -25,7 +26,9 @@ class Interpreter:
         if stmt.initialiser:
             value = self._evaluate(stmt.initialiser)
         if not stmt.identifier.lexeme:
-            raise InterpreterException(stmt.initialiser, stmt.identifier, "Identifier must not be empty")
+            raise InterpreterException(
+                stmt.initialiser, stmt.identifier, "Identifier must not be empty"
+            )
         self.env.define(stmt.identifier.lexeme, value)
 
     def visit_assignment_expression(self, expr: expressions.Assignment):
