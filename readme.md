@@ -23,7 +23,6 @@ Install required programs:
 See the [crash course](/docs/crash-course.md)
 
 # todo
-- WIP: document a crash course
 - up to here: https://craftinginterpreters.com/control-flow.html#logical-operators
 - repl: parameter for debug verbosity on/off
 - repl: don't throw on undefined var

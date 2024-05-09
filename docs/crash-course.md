@@ -23,7 +23,9 @@ mistakes!
     - for more detail, see https://craftinginterpreters.com/representing-code.html
 - [parser](../pylox/parser/parser.py): scans tokens, produces statements,
   expressions, declarations. Compare the parser to the lox grammar - each rule
-  is implemented by a function in the parser
+  is implemented by a function in the parser. The parser is a 'recursive descent
+  parser', which according to Wikipedia, closely mirrors the grammar it
+  recognises: https://en.wikipedia.org/wiki/Recursive_descent_parser
 
 # Quick walkthrough of executing a statement
 Look at the following example of using the repl (`./make.sh lox-repl`):
@@ -39,3 +41,23 @@ $ ./make.sh lox-repl    # start the repl
     - scans characters into tokens
     - parses tokens into statements
     - feeds statements to the [Interpreter](../pylox/interpreter.py)
+- token scanning is pretty straightforward, so I won't cover that
+- if you set `DEBUG = True` in pylox.py, it will print out the
+  tokens, and `(print (+ 1.0 1.0))`
+- the parser stores the list of tokens, and works its way through it
+  with functions that consume the tokens. If you open up the
+  [lox grammar](https://craftinginterpreters.com/appendix-i.html),
+  you can follow along with what the parser is doing, starting from `parse`.
+- first it tries to consume a declaration. There is none, and I haven't
+  implemented the other declarations yet, so it moves onto `statement`.
+- `_statement()` eventually reaches `PRINT`, which matches the current
+  token, so the print token is consumed, and the parser 'descends' into
+  the print statement function.
+- a print statement expects an expression, so `_print_statement()` descends
+  into `_expression()`.
+- hopefully you get it by now. An expression is returned, and
+  `_print_statement()` returns a `Print(Statement)` object.
+- all tokens have been consumed, so the parser returns the print statement
+- the intepreter is given all statements, and executes them one by one:
+    - [interpreter.interpret](../pylox/interpreter.py#L19)
+- the interpreter contains an 'environment' that stores variables
