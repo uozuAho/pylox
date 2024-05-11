@@ -23,7 +23,8 @@ Install required programs:
 See the [crash course](/docs/crash-course.md)
 
 # todo
-- implement for loop: https://craftinginterpreters.com/control-flow.html#for-loops
+- functions: https://craftinginterpreters.com/functions.html
+- when functions implemented: write tests in lox
 - repl: parameter for debug verbosity on/off
 - repl: don't throw on undefined var
 - parser error recovery: https://craftinginterpreters.com/statements-and-state.html#parsing-variables
