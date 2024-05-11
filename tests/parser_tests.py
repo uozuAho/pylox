@@ -3,7 +3,6 @@ import unittest
 from pylox.parser.parser import Parser
 from pylox.parser import expressions
 from pylox.parser import statements
-from pylox.scanner import Scanner
 from pylox.token import Token
 from pylox.token_types import TokenTypes as t
 
@@ -261,4 +260,3 @@ class ParserTests(unittest.TestCase):
         while_stmt = stmts[0]
 
         self.assertIsInstance(while_stmt, statements.While)
-

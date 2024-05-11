@@ -79,9 +79,7 @@ class Parser:
         #
         # See https://craftinginterpreters.com/control-flow.html#desugaring
         if increment:
-            body = statements.Block([
-                body,
-                statements.ExpressionStatement(increment)])
+            body = statements.Block([body, statements.ExpressionStatement(increment)])
 
         condition = condition or expressions.Literal(True)
         body = statements.While(condition, body)
@@ -90,7 +88,6 @@ class Parser:
             body = statements.Block([initialiser, body])
 
         return body
-
 
     def _if_statement(self):
         self._consume(t.LEFT_PAREN, "Expected '(' after 'if'.")
