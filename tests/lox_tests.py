@@ -185,3 +185,31 @@ class LoxTests_WhileLoops(unittest.TestCase):
         self.lox.execute("var temp = 5;")
         self.lox.execute("while (temp > 0) { print 1; temp = temp - 1; }")
         self.assertEqual(self.output.num_sent(), 5)
+
+
+class LoxTests_ForLoops(unittest.TestCase):
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output=self.output)
+
+    def test_for_var_one_loop(self):
+        self.lox.execute("""
+                         for (var do_loop = true; do_loop; do_loop = false) {
+                            print 1;
+                         }
+                         """)
+        self.assertEqual(self.output.num_sent(), 1)
+        self.assertEqual(self.output.last_sent, 1)
+
+    def test_for_false_does_nothing(self):
+        self.lox.execute("for (;false;) print 1;")
+        self.assertEqual(self.output.num_sent(), 0)
+
+    def test_for_loops_multiple_times(self):
+        self.lox.execute("""
+                         for (var i = 0; i < 5; i = i + 1) {
+                            print i;
+                         }
+                         """)
+        self.assertEqual(self.output.num_sent(), 5)
+        self.assertEqual(self.output.last_sent, 4)

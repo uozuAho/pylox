@@ -262,11 +262,3 @@ class ParserTests(unittest.TestCase):
 
         self.assertIsInstance(while_stmt, statements.While)
 
-    def test_for_loop(self):
-        tokens = Scanner("""for (var i = 0; i < 1; i++) {
-                                print "boop";
-                            }
-                         """).scan_tokens()
-        parser = Parser(tokens)
-        statements = list(parser.parse())
-        self.assertEqual(1, len(statements))
