@@ -30,6 +30,8 @@ class Parser:
         return statements.VariableDeclaration(identifier, expression)
 
     def _statement(self):
+        if self._consume_if(t.FOR):
+            return self._for_statement()
         if self._consume_if(t.IF):
             return self._if_statement()
         if self._consume_if(t.WHILE):
@@ -39,6 +41,53 @@ class Parser:
         if self._consume_if(t.LEFT_BRACE):
             return statements.Block(self._block())
         return self._expression_statement()
+
+    def _for_statement(self):
+        self._consume(t.LEFT_PAREN, "Expected '(' after 'for'.")
+
+        if self._consume_if(t.SEMICOLON):
+            initialiser = None
+        elif self._consume_if(t.VAR):
+            initialiser = self._var_declaration()
+        else:
+            initialiser = self._expression_statement()
+
+        condition = None
+        if not self._current_token_is(t.SEMICOLON):
+            condition = self._expression()
+
+        self._consume(t.SEMICOLON, "Expected ';' after loop condition")
+
+        increment = None
+        if not self._current_token_is(t.RIGHT_PAREN):
+            increment = self._expression()
+
+        self._consume(t.RIGHT_PAREN, "Expected ')' after for clauses")
+
+        body = self._statement()
+
+        # Here, we 'desugar' the for loop into a while loop:
+        #
+        # initialiser
+        # while (condition) {
+        #   body
+        #   increment
+        # }
+        #
+        # The interpreter already deals with while loops, so
+        # there's no need for 'for' handling code in the interpreter.
+        #
+        # See https://craftinginterpreters.com/control-flow.html#desugaring
+        if increment:
+            body = statements.Block([body, statements.ExpressionStatement(increment)])
+
+        condition = condition or expressions.Literal(True)
+        body = statements.While(condition, body)
+
+        if initialiser:
+            body = statements.Block([initialiser, body])
+
+        return body
 
     def _if_statement(self):
         self._consume(t.LEFT_PAREN, "Expected '(' after 'if'.")
@@ -243,3 +292,6 @@ class ParserException(Exception):
     def __init__(self, token: Token, message: str):
         self.token = token
         self.message = message
+
+    def __str__(self):
+        return f"On line {self.token.line}, '{self.token.lexeme}': {self.message}"
