@@ -4,10 +4,8 @@ My implementation of lox from https://craftinginterpreters.com, using python.
 
 # quick start
 Install required programs:
-- [python](https://www.python.org/)
-    - last tested with 3.12
+- [uv](https://github.com/astral-sh/uv)
 - bash-compatible shell
-    - my go-to is [git for windows](https://git-scm.com/download/win)
 
 ```sh
 ./make.sh test
