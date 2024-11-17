@@ -9,11 +9,15 @@ from .io import OutputStream, StdOutputStream
 
 
 class Lox:
-    def __init__(self, output: typ.Optional[OutputStream] = None, debug: bool = False):
+    def __init__(self,
+                 output: typ.Optional[OutputStream] = None,
+                 debug: bool = False,
+                 throw: bool = True):
         self.out = output or StdOutputStream()
         self.interpreter = Interpreter(self.out)
         self.print_tokens = debug
         self.print_ast = debug
+        self.throw = throw
 
     def execute(self, input: str):
         error_message = None
@@ -27,6 +31,9 @@ class Lox:
 
         if error_message:
             self.out.send(error_message)
+
+        if error_message and self.throw:
+            raise Exception(error_message)
 
     def _execute(self, input: str):
         tokens = list(Scanner(input).scan_tokens())

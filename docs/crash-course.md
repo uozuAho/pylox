@@ -61,3 +61,10 @@ $ ./make.sh lox-repl    # start the repl
 - the intepreter is given all statements, and executes them one by one:
     - [interpreter.interpret](../pylox/interpreter.py#L19)
 - the interpreter contains an 'environment' that stores variables
+
+# Adding a language feature
+This is the process I followed to add function definitions/calls:
+(see https://craftinginterpreters.com/functions.html)
+
+- add a test to lox_tests.py
+    - declaration first: https://craftinginterpreters.com/functions.html#function-declarations

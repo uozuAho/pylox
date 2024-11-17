@@ -213,3 +213,39 @@ class LoxTests_ForLoops(unittest.TestCase):
                          """)
         self.assertEqual(self.output.num_sent(), 5)
         self.assertEqual(self.output.last_sent, 4)
+
+
+class LoxTests_Functions(unittest.TestCase):
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output=self.output)
+
+    def test_declaration(self):
+        self.lox.execute(
+            """
+            fun print_sum(a, b) {
+                print a + b;
+            }
+            """
+        )
+
+    # todo:
+    # def test_decl_and_run(self):
+    #     self.lox.execute(
+    #         """
+    #         fun print_sum(a, b) {
+    #             print a + b;
+    #         }
+
+    #         print_sum(1, 2);
+    #         """
+    #     )
+    #     self.assertEqual(self.output.num_sent(), 1)
+    #     self.assertEqual(self.output.last_sent, 3)
+
+    # todo:
+    # def test_not_a_function():
+    #     "totally not a function"();
+    # https://craftinginterpreters.com/functions.html#call-type-errors
+    # too many args
+    # too few args

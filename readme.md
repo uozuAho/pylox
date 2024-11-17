@@ -22,6 +22,11 @@ See the [crash course](/docs/crash-course.md)
 
 # todo
 - functions: https://craftinginterpreters.com/functions.html
+    - fix tests broken by throw bug
+    - WIP: document how to add a language feature in crash-course
+    - WIP: func decl
+    - maybe: func call
+    - read from start of https://craftinginterpreters.com/functions.html
 - when functions implemented: write tests in lox
 - repl: parameter for debug verbosity on/off
 - repl: don't throw on undefined var
