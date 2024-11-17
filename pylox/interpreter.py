@@ -1,6 +1,7 @@
 import typing as typ
 
 from pylox.callable import Callable
+from pylox.native_funcs import Clock
 
 from .parser import expressions
 from .parser import statements
@@ -18,6 +19,9 @@ class Interpreter:
     ):
         self.out = output or StdOutputStream()
         self.env = environment or Environment()
+        self.globals = self.env
+
+        self.globals.define("clock", Clock())
 
     def interpret(self, statements: typ.Iterable[statements.Statement]):
         for statement in statements:

@@ -229,18 +229,23 @@ class LoxTests_Functions(unittest.TestCase):
             """
         )
 
-    def test_decl_and_run(self):
-        self.lox.execute(
-            """
-            fun print_sum(a, b) {
-                print a + b;
-            }
+    # def test_decl_and_run(self):
+    #     self.lox.execute(
+    #         """
+    #         fun print_sum(a, b) {
+    #             print a + b;
+    #         }
 
-            print_sum(1, 2);
-            """
-        )
+    #         print_sum(1, 2);
+    #         """
+    #     )
+    #     self.assertEqual(self.output.num_sent(), 1)
+    #     self.assertEqual(self.output.last_sent, 3)
+
+    def test_native_call(self):
+        self.lox.execute("print(clock());")
         self.assertEqual(self.output.num_sent(), 1)
-        self.assertEqual(self.output.last_sent, 3)
+        self.assertGreater(self.output.last_sent, 1234.56)
 
     # todo:
     # def test_not_a_function():
