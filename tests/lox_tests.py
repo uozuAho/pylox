@@ -9,7 +9,7 @@ from test_utils.test_io import TestOutputStream
 class LoxTests_Execute_Expressions(unittest.TestCase):
     def setUp(self):
         self.output = TestOutputStream()
-        self.lox = Lox(output=self.output)
+        self.lox = Lox(output=self.output, throw=False)
 
     def test_numerical(self):
         params = [
@@ -60,7 +60,7 @@ class LoxTests_Execute_Statements(unittest.TestCase):
 class LoxTests_Variables(unittest.TestCase):
     def setUp(self):
         self.output = TestOutputStream()
-        self.lox = Lox(output=self.output)
+        self.lox = Lox(output=self.output, throw=False)
 
     def test_declare_then_print(self):
         self.lox.execute("var a;")
