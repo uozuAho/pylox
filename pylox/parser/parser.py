@@ -229,7 +229,30 @@ class Parser:
             right = self._unary()
             return expressions.Unary(operator, right)
 
-        return self._primary()
+        return self._call()
+
+    def _call(self):
+        expr = self._primary()
+        while True:
+            if self._consume_if(t.LEFT_PAREN):
+                expr = self._consume_call(expr)
+            else:
+                break
+        return expr
+
+    def _consume_call(self, callee: expressions.Expression):
+        args = []
+
+        if not self._current_token_is(t.RIGHT_PAREN):
+            while True:
+                args.append(self._expression())
+                if not self._consume_if(t.COMMA):
+                    break
+
+        closing_paren = self._consume(t.RIGHT_PAREN, "expected ')' after arguments")
+
+        return expressions.Call(callee, closing_paren, args)
+
 
     def _primary(self):
         if self._consume_if(t.FALSE):

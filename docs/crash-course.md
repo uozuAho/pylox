@@ -67,8 +67,7 @@ This is the process I followed to add function definitions/calls:
 (see https://craftinginterpreters.com/functions.html)
 
 - add a test to lox_tests.py
-    - declaration first: https://craftinginterpreters.com/functions.html#function-declarations
-- run the test, be guided by the errors. Steps for adding functions below:
+- run the test, be guided by the errors. Steps for adding functions are below.
 - missing function declaration statement: add to parser
     - follow the grammar rules:
         ```
@@ -80,3 +79,4 @@ This is the process I followed to add function definitions/calls:
       delcarations. Insert the code in this area of the parser. Follow other
       parser methods to consume the expected tokens.
 - add code for the interpreter to visit the new declaration
+- repeat for function calls

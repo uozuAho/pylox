@@ -24,6 +24,9 @@ class Interpreter:
     def visit_function_declaration(self, stmt: statements.FunctionDeclaration):
         pass
 
+    def visit_call(self, expr: expressions.Call):
+        pass
+
     def visit_variable_declaration(self, stmt: statements.VariableDeclaration):
         value = None
         if stmt.initialiser:
