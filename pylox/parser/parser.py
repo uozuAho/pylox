@@ -17,9 +17,27 @@ class Parser:
             yield self._declaration()
 
     def _declaration(self):
+        if self._consume_if(t.FUN):
+            return self._fun_declaration("function")
         if self._consume_if(t.VAR):
             return self._var_declaration()
         return self._statement()
+
+    def _fun_declaration(self, kind: str):
+        name = self._consume(t.IDENTIFIER, f"expected {kind} name")
+        self._consume(t.LEFT_PAREN, f"expected '(' after {kind} name")
+        params = []
+        if not self._current_token_is(t.RIGHT_PAREN):
+            while True:
+                if len(params) >= 255:
+                    raise ParserException(self._current_token, "Can't have more than 255 parameters")
+                params.append(self._consume(t.IDENTIFIER, "expected parameter name"))
+                if not self._consume_if(t.COMMA):
+                    break
+        self._consume(t.RIGHT_PAREN, "expected ')' after parameters")
+        self._consume(t.LEFT_BRACE, f"expected '{{' before {kind} body")
+        body = self._block()
+        return statements.FunctionDeclaration(name, params, body)
 
     def _var_declaration(self):
         identifier = self._consume(t.IDENTIFIER, "expected variable name")

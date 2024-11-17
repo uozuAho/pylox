@@ -28,6 +28,16 @@ class Print(Statement):
         return visitor.visit_print_statement(self)
 
 
+class FunctionDeclaration(Statement):
+    def __init__(self, name: Token, params: List[Token], body: List[Statement]):
+        self.name = name
+        self.params = params
+        self.body = body
+
+    def accept(self, visitor):
+        return visitor.visit_function_declaration(self)
+
+
 class VariableDeclaration(Statement):
     def __init__(self, identifier: Token, initialiser: Expression):
         self.identifier = identifier
