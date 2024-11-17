@@ -1,5 +1,7 @@
 import typing as typ
 
+from pylox.callable import Callable
+
 from .parser import expressions
 from .parser import statements
 from .token_types import TokenTypes as t
@@ -25,7 +27,16 @@ class Interpreter:
         pass
 
     def visit_call(self, expr: expressions.Call):
-        pass
+        callee: Callable = self._evaluate(expr.callee)
+        args = [self._evaluate(x) for x in expr.args]
+
+        if not isinstance(callee, Callable):
+            raise InterpreterException(expr, None, "Can only call functions and classes")
+
+        if len(args) != callee.arity():
+            raise InterpreterException(expr, None, f"Expected {callee.arity()} args, got {len(args)}")
+
+        return callee.call(self, args)
 
     def visit_variable_declaration(self, stmt: statements.VariableDeclaration):
         value = None

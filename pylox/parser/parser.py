@@ -245,6 +245,8 @@ class Parser:
 
         if not self._current_token_is(t.RIGHT_PAREN):
             while True:
+                if len(args) >= 255:
+                    raise ParserException(self._current_token, "Can't have more than 255 arguments")
                 args.append(self._expression())
                 if not self._consume_if(t.COMMA):
                     break

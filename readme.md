@@ -23,7 +23,6 @@ See the [crash course](/docs/crash-course.md)
 # todo
 - functions: https://craftinginterpreters.com/functions.html
     - WIP: document how to add a language feature in crash-course
-    - func call
     - read from start of https://craftinginterpreters.com/functions.html
 - when functions implemented: write tests in lox
 - repl: parameter for debug verbosity on/off
