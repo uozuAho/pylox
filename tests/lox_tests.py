@@ -229,19 +229,18 @@ class LoxTests_Functions(unittest.TestCase):
             """
         )
 
-    # todo:
-    # def test_decl_and_run(self):
-    #     self.lox.execute(
-    #         """
-    #         fun print_sum(a, b) {
-    #             print a + b;
-    #         }
+    def test_decl_and_run(self):
+        self.lox.execute(
+            """
+            fun print_sum(a, b) {
+                print a + b;
+            }
 
-    #         print_sum(1, 2);
-    #         """
-    #     )
-    #     self.assertEqual(self.output.num_sent(), 1)
-    #     self.assertEqual(self.output.last_sent, 3)
+            print_sum(1, 2);
+            """
+        )
+        self.assertEqual(self.output.num_sent(), 1)
+        self.assertEqual(self.output.last_sent, 3)
 
     # todo:
     # def test_not_a_function():

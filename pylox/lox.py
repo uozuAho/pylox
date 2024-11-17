@@ -56,7 +56,7 @@ class Lox:
         if exception.token.type == t.EOF:
             position_msg = "at end of file"
         else:
-            position_msg = f'at token "{exception.token.lexeme}"'
+            position_msg = f'on line {exception.token.line}, token "{exception.token.lexeme}"'
         return f"{position_msg}: {exception.message}"
 
     def _interpreter_exception_to_message(self, exception: InterpreterException):
