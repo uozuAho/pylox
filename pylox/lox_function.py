@@ -9,8 +9,8 @@ class LoxFunction(Callable):
 
     def call(self, interpreter, args):
         env = Environment(interpreter.globals)
-        for p in self._declaration.params:
-            env.define(p.lexeme, p)
+        for i, p in enumerate(self._declaration.params):
+            env.define(p.lexeme, args[i])
         interpreter.execute_block(self._declaration.body, env)
         return None
 

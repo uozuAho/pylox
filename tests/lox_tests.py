@@ -253,3 +253,4 @@ class LoxTests_Functions(unittest.TestCase):
     # https://craftinginterpreters.com/functions.html#call-type-errors
     # too many args
     # too few args
+    # return vals?
