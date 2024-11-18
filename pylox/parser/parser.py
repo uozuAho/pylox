@@ -56,6 +56,8 @@ class Parser:
             return self._while_statement()
         if self._consume_if(t.PRINT):
             return self._print_statement()
+        if self._consume_if(t.RETURN):
+            return self._return_statement()
         if self._consume_if(t.LEFT_BRACE):
             return statements.Block(self._block())
         return self._expression_statement()
@@ -140,6 +142,14 @@ class Parser:
         expr = self._expression()
         self._consume(t.SEMICOLON, "expected ';' after expression")
         return statements.Print(expr)
+
+    def _return_statement(self):
+        keyword = self._previous_token()
+        val = None
+        if not self._current_token_is(t.SEMICOLON):
+            val = self._expression()
+        self._consume(t.SEMICOLON, "expected ';' after return value")
+        return statements.Return(keyword, val)
 
     def _expression_statement(self):
         expr = self._expression()

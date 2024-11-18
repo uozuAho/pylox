@@ -63,20 +63,9 @@ $ ./make.sh lox-repl    # start the repl
 - the interpreter contains an 'environment' that stores variables
 
 # Adding a language feature
-This is the process I followed to add function definitions/calls:
-(see https://craftinginterpreters.com/functions.html)
-
 - add a test to lox_tests.py
-- run the test, be guided by the errors. Steps for adding functions are below.
-- missing function declaration statement: add to parser
-    - follow the grammar rules:
-        ```
-        declaration -> funDecl     <---- new
-                    |  varDecl
-                    |  statement ;
-        ```
-    - this means function declarations must be consumed before variable
-      delcarations. Insert the code in this area of the parser. Follow other
-      parser methods to consume the expected tokens.
-- add code for the interpreter to visit the new declaration
-- repeat for function calls
+- run the test, be guided by the errors. You'll usually go in the following
+  order:
+- parser: parse code to an expression/statement
+    - add the expression/statement type
+- interpreter: evaluate the expression/statement

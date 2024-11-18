@@ -3,6 +3,7 @@ import typing as typ
 from pylox.callable import Callable
 from pylox.lox_function import LoxFunction
 from pylox.native_funcs import Clock
+from pylox.return_exception import ReturnException
 
 from .parser import expressions
 from .parser import statements
@@ -70,6 +71,12 @@ class Interpreter:
         if value is None:
             value = "nil"
         self.out.send(value)
+
+    def visit_return_statement(self, stmt: statements.Return):
+        value = None
+        if stmt.value != None:
+            value = self._evaluate(stmt.value)
+        raise ReturnException(value)
 
     def visit_if(self, stmt: statements.If):
         if self._is_truthy(self._evaluate(stmt.condition)):

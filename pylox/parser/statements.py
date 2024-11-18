@@ -28,6 +28,15 @@ class Print(Statement):
         return visitor.visit_print_statement(self)
 
 
+class Return(Statement):
+    def __init__(self, keyword: Token, value):
+        self.keyword = keyword
+        self.value = value
+
+    def accept(self, visitor):
+        return visitor.visit_return_statement(self)
+
+
 class FunctionDeclaration(Statement):
     def __init__(self, name: Token, params: List[Token], body: List[Statement]):
         self.name = name

@@ -247,6 +247,32 @@ class LoxTests_Functions(unittest.TestCase):
         self.assertEqual(self.output.num_sent(), 1)
         self.assertGreater(self.output.last_sent, 1234.56)
 
+    def test_return_val(self):
+        self.lox.execute(
+            """
+            fun sum(a, b) { return a + b; }
+            print sum(1, 2);
+            """
+        )
+        self.assertEqual(self.output.num_sent(), 1)
+        self.assertEqual(self.output.last_sent, 3)
+
+    def test_fib(self):
+        """ tests a whole bunch of stuff: function, conditional, arithmetic,
+            parameters, more
+        """
+        self.lox.execute(
+            """
+            fun fib(n) {
+                if (n <= 1) return n;
+                return fib(n - 2) + fib(n - 1);
+            }
+            print fib(6);
+            """
+        )
+        self.assertEqual(self.output.num_sent(), 1)
+        self.assertEqual(self.output.last_sent, 8)
+
     # todo:
     # def test_not_a_function():
     #     "totally not a function"();
