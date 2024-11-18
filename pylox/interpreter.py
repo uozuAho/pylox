@@ -1,6 +1,7 @@
 import typing as typ
 
 from pylox.callable import Callable
+from pylox.lox_function import LoxFunction
 from pylox.native_funcs import Clock
 
 from .parser import expressions
@@ -28,7 +29,8 @@ class Interpreter:
             self._execute(statement)
 
     def visit_function_declaration(self, stmt: statements.FunctionDeclaration):
-        pass
+        func = LoxFunction(stmt)
+        self.env.define(stmt.name.lexeme, func)
 
     def visit_call(self, expr: expressions.Call):
         callee: Callable = self._evaluate(expr.callee)
