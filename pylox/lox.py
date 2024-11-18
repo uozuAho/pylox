@@ -26,14 +26,15 @@ class Lox:
             self._execute(input)
         except ParserException as p:
             error_message = self._parser_exception_to_message(p)
+            p.add_note(error_message)
+            if self.throw: raise
         except InterpreterException as i:
             error_message = self._interpreter_exception_to_message(i)
+            i.add_note(error_message)
+            if self.throw: raise
 
         if error_message:
             self.out.send(error_message)
-
-        if error_message and self.throw:
-            raise Exception(error_message)
 
     def _execute(self, input: str):
         tokens = list(Scanner(input).scan_tokens())
