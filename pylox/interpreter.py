@@ -80,7 +80,7 @@ class Interpreter:
             self._execute(stmt.body)
 
     def visit_block(self, block: statements.Block):
-        self._execute_block(block.statements, Environment(self.env))
+        self.execute_block(block.statements, Environment(self.env))
 
     def visit_binary_expression(self, expr: expressions.Binary):
         left = self._evaluate(expr.left)
@@ -157,10 +157,7 @@ class Interpreter:
 
         return self._evaluate(expr.right)
 
-    def _execute(self, statement: statements.Statement):
-        statement.accept(self)
-
-    def _execute_block(
+    def execute_block(
         self, stmts: typ.List[statements.Statement], environment: Environment
     ):
         backup_env = self.env
@@ -171,6 +168,9 @@ class Interpreter:
                 self._execute(stmt)
         finally:
             self.env = backup_env
+
+    def _execute(self, statement: statements.Statement):
+        statement.accept(self)
 
     def _evaluate(self, expression: expressions.Expression):
         return expression.accept(self)
