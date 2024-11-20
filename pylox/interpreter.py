@@ -30,7 +30,7 @@ class Interpreter:
             self._execute(statement)
 
     def visit_function_declaration(self, stmt: statements.FunctionDeclaration):
-        func = LoxFunction(stmt)
+        func = LoxFunction(stmt, self.env)
         self.env.define(stmt.name.lexeme, func)
 
     def visit_call(self, expr: expressions.Call):

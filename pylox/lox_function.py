@@ -5,11 +5,14 @@ from pylox.return_exception import ReturnException
 
 
 class LoxFunction(Callable):
-    def __init__(self, declaration: statements.FunctionDeclaration):
+    def __init__(self,
+                 declaration: statements.FunctionDeclaration,
+                 closure: Environment):
         self._declaration = declaration
+        self._closure = closure
 
     def call(self, interpreter, args):
-        env = Environment(interpreter.globals)
+        env = Environment(self._closure)
         for i, p in enumerate(self._declaration.params):
             env.define(p.lexeme, args[i])
         try:

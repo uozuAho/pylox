@@ -278,10 +278,30 @@ class LoxTests_Functions(unittest.TestCase):
         run = lambda: self.lox.execute('"asdf"();')
         self.assertRaises(InterpreterException, run)
 
-    # todo:
-    # def test_not_a_function():
-    #     "totally not a function"();
-    # https://craftinginterpreters.com/functions.html#call-type-errors
-    # too many args
-    # too few args
-    # return vals?
+    def test_too_few_args(self):
+        run = lambda: self.lox.execute(
+            """
+            fun sum(a, b) { return a + b; }
+            print sum(1);
+            """
+        )
+        self.assertRaises(InterpreterException, run)
+
+    def test_local_func(self):
+        self.lox.execute(
+            """
+            fun makeCounter() {
+                var i = 0;
+                fun count() {
+                    i = i + 1;
+                    return i;
+                }
+                return count;
+            }
+            var counter = makeCounter();
+            print(counter()); // 1
+            print(counter()); // 2
+            """
+        )
+        self.assertEqual(self.output.num_sent(), 2)
+        self.assertEqual(self.output.last_sent, 2)
