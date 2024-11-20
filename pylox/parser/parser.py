@@ -1,4 +1,4 @@
-from typing import Iterator, List
+from typing import Any, Iterator, List
 
 from . import expressions
 from . import statements
@@ -26,12 +26,12 @@ class Parser:
     def _fun_declaration(self, kind: str):
         name = self._consume(t.IDENTIFIER, f"expected {kind} name")
         self._consume(t.LEFT_PAREN, f"expected '(' after {kind} name")
-        params = []
+        params: List[Token] = []
         if not self._current_token_is(t.RIGHT_PAREN):
             while True:
                 if len(params) >= 255:
                     raise ParserException(
-                        self._current_token, "Can't have more than 255 parameters"
+                        self._current_token(), "Can't have more than 255 parameters"
                     )
                 params.append(self._consume(t.IDENTIFIER, "expected parameter name"))
                 if not self._consume_if(t.COMMA):
@@ -253,13 +253,13 @@ class Parser:
         return expr
 
     def _consume_call(self, callee: expressions.Expression):
-        args = []
+        args: Any = []
 
         if not self._current_token_is(t.RIGHT_PAREN):
             while True:
                 if len(args) >= 255:
                     raise ParserException(
-                        self._current_token, "Can't have more than 255 arguments"
+                        self._current_token(), "Can't have more than 255 arguments"
                     )
                 args.append(self._expression())
                 if not self._consume_if(t.COMMA):

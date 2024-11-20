@@ -1,7 +1,7 @@
 class Callable:
     """abstract callable"""
 
-    def call(interpreter, args):
+    def call(self, interpreter, args):
         pass
 
     def arity(self):
