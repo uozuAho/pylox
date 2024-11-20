@@ -5,9 +5,9 @@ from pylox.return_exception import ReturnException
 
 
 class LoxFunction(Callable):
-    def __init__(self,
-                 declaration: statements.FunctionDeclaration,
-                 closure: Environment):
+    def __init__(
+        self, declaration: statements.FunctionDeclaration, closure: Environment
+    ):
         self._declaration = declaration
         self._closure = closure
 
@@ -25,4 +25,4 @@ class LoxFunction(Callable):
         return len(self._declaration.params)
 
     def __repr__(self):
-        return f'<fn {self._declaration.name.lexeme}>'
+        return f"<fn {self._declaration.name.lexeme}>"

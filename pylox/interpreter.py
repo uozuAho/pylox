@@ -38,10 +38,14 @@ class Interpreter:
         args = [self._evaluate(x) for x in expr.args]
 
         if not isinstance(callee, Callable):
-            raise InterpreterException(expr, None, "Can only call functions and classes")
+            raise InterpreterException(
+                expr, None, "Can only call functions and classes"
+            )
 
         if len(args) != callee.arity():
-            raise InterpreterException(expr, None, f"Expected {callee.arity()} args, got {len(args)}")
+            raise InterpreterException(
+                expr, None, f"Expected {callee.arity()} args, got {len(args)}"
+            )
 
         return callee.call(self, args)
 

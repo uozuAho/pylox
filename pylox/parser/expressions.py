@@ -76,7 +76,9 @@ class Logical(Expression):
 
 
 class Call(Expression):
-    def __init__(self, callee: Expression, closing_paren: Token, args: List[Expression]):
+    def __init__(
+        self, callee: Expression, closing_paren: Token, args: List[Expression]
+    ):
         self.callee = callee
         self.closing_paren = closing_paren
         self.args = args

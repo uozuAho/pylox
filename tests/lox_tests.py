@@ -259,8 +259,8 @@ class LoxTests_Functions(unittest.TestCase):
         self.assertEqual(self.output.last_sent, 3)
 
     def test_fib(self):
-        """ tests a whole bunch of stuff: function, conditional, arithmetic,
-            parameters, more
+        """tests a whole bunch of stuff: function, conditional, arithmetic,
+        parameters, more
         """
         self.lox.execute(
             """
