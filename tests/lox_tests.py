@@ -275,16 +275,20 @@ class LoxTests_Functions(unittest.TestCase):
         self.assertEqual(self.output.last_sent, 8)
 
     def test_throws_on_call_non_function(self):
-        def run(): self.lox.execute('"asdf"();')
+        def run():
+            self.lox.execute('"asdf"();')
+
         self.assertRaises(InterpreterException, run)
 
     def test_too_few_args(self):
-        def run(): self.lox.execute(
-            """
+        def run():
+            self.lox.execute(
+                """
             fun sum(a, b) { return a + b; }
             print sum(1);
             """
-        )
+            )
+
         self.assertRaises(InterpreterException, run)
 
     def test_local_func(self):

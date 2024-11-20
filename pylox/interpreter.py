@@ -44,7 +44,9 @@ class Interpreter:
 
         if len(args) != callee.arity():
             raise InterpreterException(
-                expr, expr.closing_paren, f"Expected {callee.arity()} args, got {len(args)}"
+                expr,
+                expr.closing_paren,
+                f"Expected {callee.arity()} args, got {len(args)}",
             )
 
         return callee.call(self, args)
