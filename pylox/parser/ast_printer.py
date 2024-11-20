@@ -1,3 +1,4 @@
+from pylox.parser import expressions
 from . import statements
 
 
@@ -27,6 +28,13 @@ class AstPrinter:
 
     def visit_print_statement(self, stmt: statements.Print):
         return self._parenthesize("print", stmt.expression)
+
+    def visit_call(self, expr: expressions.Call):
+        call = expr.callee.accept(self)
+        return f"{call}()"
+
+    def visit_variable_expression(self, var: expressions.Variable):
+        return var.identifier.lexeme
 
     def _parenthesize(self, name, *expressions) -> str:
         output = "(" + name

@@ -22,3 +22,6 @@ class Token:
 
     def __str__(self):
         return "{o.type} {o.lexeme} {o.literal}".format(o=self)
+
+    def __repr__(self):
+        return "{o.type}".format(o=self)

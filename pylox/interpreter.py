@@ -1,5 +1,10 @@
 import typing as typ
 
+from pylox.callable import Callable
+from pylox.lox_function import LoxFunction
+from pylox.native_funcs import Clock
+from pylox.return_exception import ReturnException
+
 from .parser import expressions
 from .parser import statements
 from .token_types import TokenTypes as t
@@ -16,10 +21,35 @@ class Interpreter:
     ):
         self.out = output or StdOutputStream()
         self.env = environment or Environment()
+        self.globals = self.env
+
+        self.globals.define("clock", Clock())
 
     def interpret(self, statements: typ.Iterable[statements.Statement]):
         for statement in statements:
             self._execute(statement)
+
+    def visit_function_declaration(self, stmt: statements.FunctionDeclaration):
+        func = LoxFunction(stmt, self.env)
+        self.env.define(stmt.name.lexeme, func)
+
+    def visit_call(self, expr: expressions.Call):
+        callee: Callable = self._evaluate(expr.callee)
+        args = [self._evaluate(x) for x in expr.args]
+
+        if not isinstance(callee, Callable):
+            raise InterpreterException(
+                expr, expr.closing_paren, "Can only call functions and classes"
+            )
+
+        if len(args) != callee.arity():
+            raise InterpreterException(
+                expr,
+                expr.closing_paren,
+                f"Expected {callee.arity()} args, got {len(args)}",
+            )
+
+        return callee.call(self, args)
 
     def visit_variable_declaration(self, stmt: statements.VariableDeclaration):
         value = None
@@ -48,6 +78,12 @@ class Interpreter:
             value = "nil"
         self.out.send(value)
 
+    def visit_return_statement(self, stmt: statements.Return):
+        value = None
+        if stmt.value is not None:
+            value = self._evaluate(stmt.value)
+        raise ReturnException(value)
+
     def visit_if(self, stmt: statements.If):
         if self._is_truthy(self._evaluate(stmt.condition)):
             self._execute(stmt.thenBranch)
@@ -59,7 +95,7 @@ class Interpreter:
             self._execute(stmt.body)
 
     def visit_block(self, block: statements.Block):
-        self._execute_block(block.statements, Environment(self.env))
+        self.execute_block(block.statements, Environment(self.env))
 
     def visit_binary_expression(self, expr: expressions.Binary):
         left = self._evaluate(expr.left)
@@ -136,10 +172,7 @@ class Interpreter:
 
         return self._evaluate(expr.right)
 
-    def _execute(self, statement: statements.Statement):
-        statement.accept(self)
-
-    def _execute_block(
+    def execute_block(
         self, stmts: typ.List[statements.Statement], environment: Environment
     ):
         backup_env = self.env
@@ -150,6 +183,9 @@ class Interpreter:
                 self._execute(stmt)
         finally:
             self.env = backup_env
+
+    def _execute(self, statement: statements.Statement):
+        statement.accept(self)
 
     def _evaluate(self, expression: expressions.Expression):
         return expression.accept(self)

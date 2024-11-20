@@ -61,3 +61,11 @@ $ ./make.sh lox-repl    # start the repl
 - the intepreter is given all statements, and executes them one by one:
     - [interpreter.interpret](../pylox/interpreter.py#L19)
 - the interpreter contains an 'environment' that stores variables
+
+# Adding a language feature
+- add a test to lox_tests.py
+- run the test, be guided by the errors. You'll usually go in the following
+  order:
+- parser: parse code to an expression/statement
+    - add the expression/statement type
+- interpreter: evaluate the expression/statement

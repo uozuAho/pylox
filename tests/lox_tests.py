@@ -1,6 +1,7 @@
 import os
 import unittest
 
+from pylox.interpreter import InterpreterException
 from pylox.lox import Lox, LoxFileRunner
 
 from test_utils.test_io import TestOutputStream
@@ -9,7 +10,7 @@ from test_utils.test_io import TestOutputStream
 class LoxTests_Execute_Expressions(unittest.TestCase):
     def setUp(self):
         self.output = TestOutputStream()
-        self.lox = Lox(output=self.output)
+        self.lox = Lox(output=self.output, throw=False)
 
     def test_numerical(self):
         params = [
@@ -60,7 +61,7 @@ class LoxTests_Execute_Statements(unittest.TestCase):
 class LoxTests_Variables(unittest.TestCase):
     def setUp(self):
         self.output = TestOutputStream()
-        self.lox = Lox(output=self.output)
+        self.lox = Lox(output=self.output, throw=False)
 
     def test_declare_then_print(self):
         self.lox.execute("var a;")
@@ -213,3 +214,98 @@ class LoxTests_ForLoops(unittest.TestCase):
                          """)
         self.assertEqual(self.output.num_sent(), 5)
         self.assertEqual(self.output.last_sent, 4)
+
+
+class LoxTests_Functions(unittest.TestCase):
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output=self.output)
+
+    def test_declaration(self):
+        self.lox.execute(
+            """
+            fun print_sum(a, b) {
+                print a + b;
+            }
+            """
+        )
+
+    def test_decl_and_run(self):
+        self.lox.execute(
+            """
+            fun print_sum(a, b) {
+                print a + b;
+            }
+
+            print_sum(1, 2);
+            """
+        )
+        self.assertEqual(self.output.num_sent(), 1)
+        self.assertEqual(self.output.last_sent, 3)
+
+    def test_native_call(self):
+        self.lox.execute("print(clock());")
+        self.assertEqual(self.output.num_sent(), 1)
+        self.assertGreater(self.output.last_sent, 1234.56)
+
+    def test_return_val(self):
+        self.lox.execute(
+            """
+            fun sum(a, b) { return a + b; }
+            print sum(1, 2);
+            """
+        )
+        self.assertEqual(self.output.num_sent(), 1)
+        self.assertEqual(self.output.last_sent, 3)
+
+    def test_fib(self):
+        """tests a whole bunch of stuff: function, conditional, arithmetic,
+        parameters, more
+        """
+        self.lox.execute(
+            """
+            fun fib(n) {
+                if (n <= 1) return n;
+                return fib(n - 2) + fib(n - 1);
+            }
+            print fib(6);
+            """
+        )
+        self.assertEqual(self.output.num_sent(), 1)
+        self.assertEqual(self.output.last_sent, 8)
+
+    def test_throws_on_call_non_function(self):
+        def run():
+            self.lox.execute('"asdf"();')
+
+        self.assertRaises(InterpreterException, run)
+
+    def test_too_few_args(self):
+        def run():
+            self.lox.execute(
+                """
+            fun sum(a, b) { return a + b; }
+            print sum(1);
+            """
+            )
+
+        self.assertRaises(InterpreterException, run)
+
+    def test_local_func(self):
+        self.lox.execute(
+            """
+            fun makeCounter() {
+                var i = 0;
+                fun count() {
+                    i = i + 1;
+                    return i;
+                }
+                return count;
+            }
+            var counter = makeCounter();
+            print(counter()); // 1
+            print(counter()); // 2
+            """
+        )
+        self.assertEqual(self.output.num_sent(), 2)
+        self.assertEqual(self.output.last_sent, 2)

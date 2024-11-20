@@ -1,4 +1,5 @@
 from ..token import Token
+from typing import List
 
 
 class Expression:
@@ -72,3 +73,15 @@ class Logical(Expression):
 
     def accept(self, visitor):
         return visitor.visit_logical_expression(self)
+
+
+class Call(Expression):
+    def __init__(
+        self, callee: Expression, closing_paren: Token, args: List[Expression]
+    ):
+        self.callee = callee
+        self.closing_paren = closing_paren
+        self.args = args
+
+    def accept(self, visitor):
+        return visitor.visit_call(self)

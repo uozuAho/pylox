@@ -9,11 +9,17 @@ from .io import OutputStream, StdOutputStream
 
 
 class Lox:
-    def __init__(self, output: typ.Optional[OutputStream] = None, debug: bool = False):
+    def __init__(
+        self,
+        output: typ.Optional[OutputStream] = None,
+        debug: bool = False,
+        throw: bool = True,
+    ):
         self.out = output or StdOutputStream()
         self.interpreter = Interpreter(self.out)
         self.print_tokens = debug
         self.print_ast = debug
+        self.throw = throw
 
     def execute(self, input: str):
         error_message = None
@@ -22,8 +28,14 @@ class Lox:
             self._execute(input)
         except ParserException as p:
             error_message = self._parser_exception_to_message(p)
+            p.add_note(error_message)
+            if self.throw:
+                raise
         except InterpreterException as i:
             error_message = self._interpreter_exception_to_message(i)
+            i.add_note(error_message)
+            if self.throw:
+                raise
 
         if error_message:
             self.out.send(error_message)
@@ -49,7 +61,9 @@ class Lox:
         if exception.token.type == t.EOF:
             position_msg = "at end of file"
         else:
-            position_msg = f'at token "{exception.token.lexeme}"'
+            position_msg = (
+                f'on line {exception.token.line}, token "{exception.token.lexeme}"'
+            )
         return f"{position_msg}: {exception.message}"
 
     def _interpreter_exception_to_message(self, exception: InterpreterException):
