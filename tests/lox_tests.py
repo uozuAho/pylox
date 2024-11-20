@@ -1,6 +1,7 @@
 import os
 import unittest
 
+from pylox.interpreter import InterpreterException
 from pylox.lox import Lox, LoxFileRunner
 
 from test_utils.test_io import TestOutputStream
@@ -272,6 +273,10 @@ class LoxTests_Functions(unittest.TestCase):
         )
         self.assertEqual(self.output.num_sent(), 1)
         self.assertEqual(self.output.last_sent, 8)
+
+    def test_throws_on_call_non_function(self):
+        run = lambda: self.lox.execute('"asdf"();')
+        self.assertRaises(InterpreterException, run)
 
     # todo:
     # def test_not_a_function():
