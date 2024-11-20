@@ -78,7 +78,7 @@ class Interpreter:
 
     def visit_return_statement(self, stmt: statements.Return):
         value = None
-        if stmt.value != None:
+        if stmt.value is not None:
             value = self._evaluate(stmt.value)
         raise ReturnException(value)
 
