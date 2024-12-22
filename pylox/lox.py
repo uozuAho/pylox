@@ -1,5 +1,7 @@
 import typing as typ
 
+from pylox.resolver import Resolver
+
 from .scanner import Scanner
 from .parser.parser import Parser, ParserException
 from .interpreter import Interpreter, InterpreterException
@@ -51,6 +53,9 @@ class Lox:
             if self.print_ast:
                 ast = AstPrinter().to_string(statement)
                 self._output(ast)
+
+        res = Resolver(self.interpreter)
+        res._resolve_all(statements)
 
         self.interpreter.interpret(statements)
 

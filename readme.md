@@ -21,10 +21,8 @@ Install required programs:
 See the [crash course](/docs/crash-course.md)
 
 # todo
-- WIP: resolver
-    - done: look up variable
-    - todo: assign variable: https://craftinginterpreters.com/resolving-and-binding.html#assigning-to-a-resolved-variable
-        - todo: run resolver, call interpreter.resolve
+- WIP: fix errors after adding resolver
+- next: https://craftinginterpreters.com/resolving-and-binding.html#resolution-errors
 - repl: parameter for debug verbosity on/off
 - repl: don't throw on undefined var
 - parser error recovery: https://craftinginterpreters.com/statements-and-state.html#parsing-variables
