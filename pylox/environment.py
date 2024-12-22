@@ -20,6 +20,9 @@ class Environment:
             return
         raise EnvironmentException(f"Undefined variable {name.lexeme}")
 
+    def assign_at(self, distance: int, name: Token, value):
+        self._ancestor(distance).values[name.lexeme] = value
+
     def get(self, name: Token):
         if name.lexeme in self.values:
             return self.values[name.lexeme]

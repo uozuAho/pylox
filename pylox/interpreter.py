@@ -64,11 +64,15 @@ class Interpreter:
 
     def visit_assignment_expression(self, expr: expressions.Assignment):
         value = self._evaluate(expr.expression)
-        self.env.assign(expr.identifier, value)
+        dist = self.locals.get(expr)
+        if dist:
+            self.env.assign_at(dist, expr.identifier, value)
+        else:
+            self.globals.assign(expr.identifier, value)
         return value
 
     def visit_variable_expression(self, expr: expressions.Variable):
-        return self._lookup_variable(expr.name, expr)
+        return self._lookup_variable(expr.identifier, expr)
 
     def visit_expression_statement(self, stmt: statements.ExpressionStatement):
         self._evaluate(stmt.expression)
