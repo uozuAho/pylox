@@ -27,6 +27,15 @@ class Environment:
             return self.parent.get(name)
         raise EnvironmentException(f"Undefined variable {name.lexeme}")
 
+    def get_at(self, distance, name: str):
+        return self._ancestor(distance).values.get(name)
+
+    def _ancestor(self, distance: int):
+        env = self
+        for i in range(distance):
+            env = env.parent
+        return env
+
 
 class EnvironmentException(Exception):
     def __init__(self, message: str):

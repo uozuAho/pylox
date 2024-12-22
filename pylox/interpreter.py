@@ -22,6 +22,7 @@ class Interpreter:
         self.out = output or StdOutputStream()
         self.env = environment or Environment()
         self.globals = self.env
+        self.locals = {}
 
         self.globals.define("clock", Clock())
 
@@ -67,7 +68,7 @@ class Interpreter:
         return value
 
     def visit_variable_expression(self, expr: expressions.Variable):
-        return self.env.get(expr.identifier)
+        return self._lookup_variable(expr.name, expr)
 
     def visit_expression_statement(self, stmt: statements.ExpressionStatement):
         self._evaluate(stmt.expression)
@@ -186,6 +187,16 @@ class Interpreter:
 
     def _execute(self, statement: statements.Statement):
         statement.accept(self)
+
+    def _resolve(self, expr: expressions.Expression, depth: int):
+        self.locals[expr] = depth
+
+    def _lookup_variable(self, name: Token, expr: expressions.Expression):
+        dist = self.locals.get(expr)
+        if dist:
+            return self.env.get_at(dist, name.lexeme)
+        else:
+            return self.globals.get(name)
 
     def _evaluate(self, expression: expressions.Expression):
         return expression.accept(self)
