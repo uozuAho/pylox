@@ -44,13 +44,13 @@ class Resolver:
         self._end_scope()
 
     def visit_variable_declaration(self, stmt: statements.VariableDeclaration):
-        self._declare(stmt.identifier.lexeme)
+        self._declare(stmt.identifier)
         if stmt.initialiser:
             self._resolve(stmt.initialiser)
-        self._define(stmt.identifier.lexeme)
+        self._define(stmt.identifier)
 
     def visit_variable_expression(self, expr: expressions.Variable):
-        if self._scopes and self._scopes[-1].get(expr.identifier.lexeme) == False:
+        if self._scopes and not self._scopes[-1].get(expr.identifier.lexeme):
             raise ResolverException(expr.identifier, "Can't read local variable in its own initialiser")
         self._resolve_local(expr, expr.identifier.lexeme)
 
@@ -63,21 +63,23 @@ class Resolver:
         self._define(stmt.name)
         self._resolve_function(stmt)
 
-    def visit_expression_statement(self, stmt: statements.Expression):
-        self._resolve(stmt)
+    def visit_expression_statement(self, stmt: statements.ExpressionStatement):
+        self._resolve(stmt.expression)
 
     def visit_if_statement(self, stmt: statements.If):
         self._resolve(stmt.condition)
         self._resolve(stmt.thenBranch)
-        if stmt.elseBranch: self._resolve(stmt.elseBranch)
+        if stmt.elseBranch:
+            self._resolve(stmt.elseBranch)
 
-    def visit_print_statment(self, stmt: statements.Print):
+    def visit_print_statement(self, stmt: statements.Print):
         self._resolve(stmt.expression)
 
     def visit_return_statment(self, stmt: statements.Return):
-        if stmt.value: self._resolve(stmt.value)
+        if stmt.value:
+            self._resolve(stmt.value)
 
-    def visit_while_statment(self, stmt: statements.While):
+    def visit_while(self, stmt: statements.While):
         self._resolve(stmt.condition)
         self._resolve(stmt.body)
 
@@ -114,8 +116,8 @@ class Resolver:
         for s in stmts:
             self._resolve(s)
 
-    def _resolve(self, stmt: statements.Statement):
-        stmt.accept(self)
+    def _resolve(self, thing: statements.Statement | expressions.Expression):
+        thing.accept(self)
 
     def _resolve_expr(self, expr: expressions.Expression):
         expr.accept(self)
@@ -125,7 +127,7 @@ class Resolver:
         for param in func.params:
             self._declare(param)
             self._define(param)
-        self._resolve(func.body)
+        self._resolve_all(func.body)
         self._end_scope()
 
     def _begin_scope(self):

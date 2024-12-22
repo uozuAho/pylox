@@ -22,7 +22,7 @@ class Interpreter:
         self.out = output or StdOutputStream()
         self.env = environment or Environment()
         self.globals = self.env
-        self.locals = {}
+        self.locals: typ.Dict[expressions.Expression | statements.Statement, int] = {}
 
         self.globals.define("clock", Clock())
 
@@ -192,7 +192,7 @@ class Interpreter:
     def _execute(self, statement: statements.Statement):
         statement.accept(self)
 
-    def _resolve(self, expr: expressions.Expression, depth: int):
+    def resolve(self, expr: expressions.Expression, depth: int):
         self.locals[expr] = depth
 
     def _lookup_variable(self, name: Token, expr: expressions.Expression):

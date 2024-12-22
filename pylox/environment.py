@@ -35,8 +35,11 @@ class Environment:
 
     def _ancestor(self, distance: int):
         env = self
-        for i in range(distance):
-            env = env.parent
+        for _ in range(distance):
+            if env.parent:
+                env = env.parent
+            else:
+                raise EnvironmentException("too far!")
         return env
 
 
