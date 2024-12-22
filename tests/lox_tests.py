@@ -309,3 +309,25 @@ class LoxTests_Functions(unittest.TestCase):
         )
         self.assertEqual(self.output.num_sent(), 2)
         self.assertEqual(self.output.last_sent, 2)
+
+class LoxTests_Resolver(unittest.TestCase):
+    def setUp(self):
+        self.output = TestOutputStream()
+        self.lox = Lox(output=self.output)
+
+    def test_resolve(self):
+        self.lox.execute(
+            """
+            var a = 1;
+            {
+                fun showA() {
+                    print(a);
+                }
+                showA();   // 1
+                var a = 2;
+                showA();   // 1 (captured in closure)
+            }
+            """
+        )
+        self.assertEqual(self.output.num_sent(), 2)
+        self.assertEqual(self.output.last_sent, 1)
