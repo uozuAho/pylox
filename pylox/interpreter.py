@@ -22,6 +22,7 @@ class Interpreter:
         self.out = output or StdOutputStream()
         self.env = environment or Environment()
         self.globals = self.env
+        self.locals: typ.Dict[expressions.Expression | statements.Statement, int] = {}
 
         self.globals.define("clock", Clock())
 
@@ -63,11 +64,15 @@ class Interpreter:
 
     def visit_assignment_expression(self, expr: expressions.Assignment):
         value = self._evaluate(expr.expression)
-        self.env.assign(expr.identifier, value)
+        dist = self.locals.get(expr)
+        if dist:
+            self.env.assign_at(dist, expr.identifier, value)
+        else:
+            self.globals.assign(expr.identifier, value)
         return value
 
     def visit_variable_expression(self, expr: expressions.Variable):
-        return self.env.get(expr.identifier)
+        return self._lookup_variable(expr.identifier, expr)
 
     def visit_expression_statement(self, stmt: statements.ExpressionStatement):
         self._evaluate(stmt.expression)
@@ -186,6 +191,16 @@ class Interpreter:
 
     def _execute(self, statement: statements.Statement):
         statement.accept(self)
+
+    def resolve(self, expr: expressions.Expression, depth: int):
+        self.locals[expr] = depth
+
+    def _lookup_variable(self, name: Token, expr: expressions.Expression):
+        dist = self.locals.get(expr)
+        if dist is not None:
+            return self.env.get_at(dist, name.lexeme)
+        else:
+            return self.globals.get(name)
 
     def _evaluate(self, expression: expressions.Expression):
         return expression.accept(self)
