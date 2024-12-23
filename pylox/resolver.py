@@ -68,7 +68,7 @@ class Resolver:
     def visit_expression_statement(self, stmt: statements.ExpressionStatement):
         self._resolve(stmt.expression)
 
-    def visit_if_statement(self, stmt: statements.If):
+    def visit_if(self, stmt: statements.If):
         self._resolve(stmt.condition)
         self._resolve(stmt.thenBranch)
         if stmt.elseBranch:
@@ -77,7 +77,7 @@ class Resolver:
     def visit_print_statement(self, stmt: statements.Print):
         self._resolve(stmt.expression)
 
-    def visit_return_statment(self, stmt: statements.Return):
+    def visit_return_statement(self, stmt: statements.Return):
         if stmt.value:
             self._resolve(stmt.value)
 
