@@ -197,7 +197,7 @@ class Interpreter:
 
     def _lookup_variable(self, name: Token, expr: expressions.Expression):
         dist = self.locals.get(expr)
-        if dist:
+        if dist is not None:
             return self.env.get_at(dist, name.lexeme)
         else:
             return self.globals.get(name)

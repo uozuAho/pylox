@@ -19,6 +19,7 @@ class Lox:
     ):
         self.out = output or StdOutputStream()
         self.interpreter = Interpreter(self.out)
+        self.resolver = Resolver(self.interpreter)
         self.print_tokens = debug
         self.print_ast = debug
         self.throw = throw
@@ -54,9 +55,7 @@ class Lox:
                 ast = AstPrinter().to_string(statement)
                 self._output(ast)
 
-        res = Resolver(self.interpreter)
-        res._resolve_all(statements)
-
+        self.resolver._resolve_all(statements)
         self.interpreter.interpret(statements)
 
     def _output(self, data):

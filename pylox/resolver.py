@@ -50,7 +50,9 @@ class Resolver:
         self._define(stmt.identifier)
 
     def visit_variable_expression(self, expr: expressions.Variable):
-        if self._scopes and not self._scopes[-1].get(expr.identifier.lexeme):
+        if (self._scopes
+            and expr.identifier.lexeme in self._scopes[-1]
+            and not self._scopes[-1].get(expr.identifier.lexeme)):
             raise ResolverException(expr.identifier, "Can't read local variable in its own initialiser")
         self._resolve_local(expr, expr.identifier.lexeme)
 
@@ -87,7 +89,7 @@ class Resolver:
         self._resolve(expr.left)
         self._resolve(expr.right)
 
-    def visit_call_expression(self, expr: expressions.Call):
+    def visit_call(self, expr: expressions.Call):
         self._resolve(expr.callee)
         for arg in expr.args:
             self._resolve(arg)
