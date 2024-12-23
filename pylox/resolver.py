@@ -35,8 +35,7 @@ class Resolver:
     """
     def __init__(self, interpreter: Interpreter):
         self._interpreter = interpreter
-        # list[{lexeme(str): is_ready(bool)}]
-        self._scopes: List[Dict[str, bool]] = []
+        self._scopes: List[Dict[str, bool]] = []  # lexeme: is_ready
 
     def visit_block(self, stmt: statements.Block):
         self._begin_scope()
@@ -142,6 +141,8 @@ class Resolver:
         if len(self._scopes) == 0:
             return
         scope = self._scopes[-1]
+        if name.lexeme in scope:
+            raise ResolverException(name, f"'{name.lexeme}' is already defined in this scope")
         scope[name.lexeme] = False
 
     def _define(self, name: Token):
