@@ -1,6 +1,6 @@
 import sys
 
-from pylox.lox import Lox, LoxRepl
+from pylox.lox import Lox, LoxRepl, LoxFileRunner
 
 DEBUG = False
 
@@ -10,6 +10,6 @@ if __name__ == "__main__":
     if len(args) == 0:
         LoxRepl(lox).run()
     elif len(args) == 1:
-        lox.run_file(args[0])
+        LoxFileRunner(lox).run(args[0])
     else:
         print("nah")

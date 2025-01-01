@@ -19,6 +19,6 @@ elif [ "$command" == "format" ]; then
 elif [ "$command" == "test" ]; then
     pattern=${2:-"*_tests.py"}
     uv run python -m unittest discover -s tests -p "$pattern"
-elif [ "$command" == "lox-repl" ]; then
-    uv run python pylox.py
+elif [ "$command" == "lox" ]; then
+    uv run python pylox.py "${@:2}"
 fi

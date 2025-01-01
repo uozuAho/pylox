@@ -15,6 +15,11 @@ Install required programs:
 ./make.sh test
 ./make.sh format
 ./make.sh lint
+
+# run lox
+./make.sh lox [lox_file]
+# example
+./make.sh lox tests/lox_test_file.lox
 ```
 
 # crash course
