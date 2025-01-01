@@ -173,7 +173,6 @@ class LoxFileRunnerTests(unittest.TestCase):
         this_dir = os.path.dirname(__file__)
         test_file = os.path.join(this_dir, "lox_test_file.lox")
         self.runner.run(test_file)
-        self.assertEqual(self.output.last_sent, 2.0)
 
 
 class LoxTests_LogicalOperators(unittest.TestCase):

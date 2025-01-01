@@ -1,1 +1,21 @@
-print 1 + 1;
+fun assert(expr, msg) {
+    if (!expr) {
+        print "ASSERTION FAILED: " + msg;
+    }
+}
+
+fun fib(n) {
+    if (n == 0 or n == 1) {
+        return 1;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+
+assert(1 + 1 == 2, "1 + 1 == 2");
+assert(false, "this should fail");
+
+var start = clock();
+fib(20);
+print("fib(20) time: ");
+print(clock() - start);
+print "all done";

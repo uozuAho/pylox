@@ -25,6 +25,9 @@ Install required programs:
 # crash course
 See the [crash course](/docs/crash-course.md)
 
+# useful docs
+- [lox grammar](https://craftinginterpreters.com/appendix-i.html)
+
 # todo
 - do next: classes: https://craftinginterpreters.com/classes.html
 - repl: parameter for debug verbosity on/off

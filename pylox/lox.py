@@ -2,7 +2,7 @@ import typing as typ
 
 from pylox.resolver import Resolver
 
-from .scanner import Scanner
+from .scanner import Scanner, ScannerError
 from .parser.parser import Parser, ParserException
 from .interpreter import Interpreter, InterpreterException
 from .parser.ast_printer import AstPrinter
@@ -45,6 +45,11 @@ class Lox:
 
     def _execute(self, input: str):
         tokens = list(Scanner(input).scan_tokens())
+
+        for t in tokens:
+            if isinstance(t, ScannerError):
+                raise Exception(f'Scanner error: line {t.line}, {t.message}')
+
         if self.print_tokens:
             for token in tokens:
                 self._output(token)
